@@ -1,13 +1,14 @@
-Common classes and fuctions for minecraft bukkit plugins
+BattleCore
+==========
 
-version 1.2: Added SQLite support
+Common classes and fuctions used across all the Battle plugins.
+
 
 Links
 ------------
-IRC Help:
-* [#BattleDev](http://irc.battleplugins.org/Developer/Git): For all developer (API and Coding) help and support, go here!
-* [#BattlePlugins](http://irc.battleplugins.org/Support/Git): For all Plugin related help and support questions, go here!
-* [#BattleBotDev](http://irc.battleplugins.org/Bot/): For all BattleBot Development, go here!
+Live Chat on Discord:
+* [BattlePlugins Dev](https://discord.gg/tMVPVJf): Join our Discord server to get support, talk about dev stuff, or just say hi!
+
 
 Battle Arena Links:
 * [Bukkit Page](http://dev.bukkit.org/bukkit-plugins/battlearena2/) (BattleArena on Bukkit!)
@@ -19,6 +20,7 @@ Battle Tracker Links:
 
 Other Links:
 * [BattleWiki](http://wiki.battleplugins.org) (Support Wiki)
-* [Ci Server](http://ci.battleplugins.org) (Ci Build Server)
-* [Battle Plugin Donations](http://donate.battleplugins.org) (Donation link)
-* [JavaDocs](http://null) (WIP)
+* ~~[Ci Server] (Jenkins Build Server)~~ *Not currently in use
+* [Battle Plugin Donations] (Donation link, coming soon)
+* [JavaDocs](http://rainbowcraft.sytes.net/javadocs/battlearena/apidocs/)
+
