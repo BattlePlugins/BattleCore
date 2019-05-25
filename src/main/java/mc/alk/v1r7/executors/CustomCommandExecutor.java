@@ -14,6 +14,7 @@ import java.util.PriorityQueue;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import mc.euro.bukkitinterface.BukkitInterface;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -558,9 +559,7 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 		if (foundPlayer != null)
 			return foundPlayer;
 
-		Player[] online = Bukkit.getOnlinePlayers();
-
-		for (Player player : online) {
+		for (Player player : BukkitInterface.getOnlinePlayers()) {
 			String playerName = player.getName();
 
 			if (playerName.equalsIgnoreCase(name)) {
@@ -584,13 +583,10 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 		if (p != null){
 			return p;
 		} else{
-			/// Iterate over the worlds to see if a player.dat file exists
-			for (World w : Bukkit.getWorlds()){
-				File f = new File(w.getName()+"/players/"+name+".dat");
-				if (f.exists()){
-					return Bukkit.getOfflinePlayer(name);
-				}
-			}
+			p = Bukkit.getOfflinePlayer(name);
+			if (p != null)
+				return p;
+
 			return null;
 		}
 	}
