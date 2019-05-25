@@ -1,8 +1,12 @@
 BattleCore
 ==========
 
-Common classes and fuctions used across all the Battle plugins.
+Common classes and functions used across all the Battle plugins.
 
+The goal of this project is to eventually hold all the common utility classes shared across all the Battle plugins.
+As of now, they are all spread throughout different projects and various different versions of the same classes
+are just in the projects directly. So whenever we need to update those classes, we have to go into all those projects
+and update them individually. The goal for this project is to change that.
 
 Links
 ------------
