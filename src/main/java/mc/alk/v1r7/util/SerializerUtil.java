@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class SerializerUtil {
@@ -85,4 +86,13 @@ public class SerializerUtil {
 		return locs;
 	}
 
+	public static String getBlockString(Block b) {
+		return b.getType() +";" +b.getData() + ";"+getBlockLocString(b.getLocation());
+	}
+
+	public static Block parseBlock(String string) {
+		String[] split = string.split(";");
+		Location l = getLocation(split[2]);
+		return l.getWorld().getBlockAt(l);
+	}
 }
