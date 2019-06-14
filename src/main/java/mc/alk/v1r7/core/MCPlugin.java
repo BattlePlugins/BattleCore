@@ -10,7 +10,14 @@ import mc.alk.v1r7.util.Log;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-
+/**
+ * Main plugin class for all plugins hooking into BattleCore.
+ * If your plugin is using BattleCore, it is highly recommended that you
+ * have your main class extend this instead of JavaPlugin.
+ *
+ * @author alkarin, Redned
+ *
+ */
 public class MCPlugin extends JavaPlugin {
 
 	protected String pluginname;

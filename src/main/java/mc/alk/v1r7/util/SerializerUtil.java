@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 
 public class SerializerUtil {
+
 	public static final boolean TESTING = false;
 
 	public static HashMap<String, String> createSaveableLocations(Map<Integer, Location> mlocs) {

@@ -1,9 +1,37 @@
 package mc.alk.v1r7.util;
 
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+
 import java.text.SimpleDateFormat;
 
 public class TimeUtil {
-	static final String version = "1.1";
+
+	static final String version = "1.2";
+	static long lastCheck = 0;
+
+	public static void testClock(Plugin plugin) {
+		final long start = System.currentTimeMillis();
+		if (start - lastCheck < 10000)
+			return;
+		lastCheck = start;
+		final int seconds = 2;
+
+		final double millis = seconds * 1000;
+		final int nTicks = 20 * seconds;
+		Runnable task = new Runnable() {
+			public void run() {
+				long now = System.currentTimeMillis();
+
+				long elapsedTime = now - start;
+				double mult = millis/elapsedTime;
+				if (mult < 0.2){
+					mult = 0.2;}
+			}
+		};
+
+		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, task, nTicks);
+	}
 
 	public static String convertToString(int minutes, int seconds){
 		return convertSecondsToString(minutes*60+seconds);
@@ -61,12 +89,16 @@ public class TimeUtil {
 	}
 
 	public static String convertLongToDate(long time) {
-		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm");
+		return sdf.format(time);
+	}
+
+	public static String convertLongToSimpleDate(long time) {
+		SimpleDateFormat sdf = new SimpleDateFormat("hh:mm");
 		return sdf.format(time);
 	}
 
 	public static String PorP(int size) {
 		return size == 1 ? "person" : "people";
 	}
-
 }

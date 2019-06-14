@@ -5,12 +5,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -28,7 +31,7 @@ import org.bukkit.entity.Player;
 
 public abstract class CustomCommandExecutor implements CommandExecutor
 {
-	public static final String version = "2.0.1";
+	public static final String version = "2.1.0";
 	static final boolean DEBUG = false;
 
 	private HashMap<String,TreeMap<Integer,MethodWrapper>> methods =
@@ -229,7 +232,7 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 		}
 
 		if (methodmap == null || methodmap.isEmpty()){
-			return sendMessage(sender, "&cThat command does not exist!&6 /"+command.getLabel()+" help &c for help");}
+			return sendMessage(sender, "&cThat command does not exist!&6 /"+command.getLabel()+" help &cfor help");}
 
 		MCCommand mccmd = null;
 		List<CommandException> errs =null;
@@ -268,7 +271,7 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 		if (!success && errs != null && !errs.isEmpty()){
 			HashSet<String> usages = new HashSet<String>();
 			for (CommandException e: errs){
-				usages.add(ChatColor.GOLD+command.getLabel() +" " +e.mw.usage+" &c:"+e.err.getMessage());
+				usages.add(ChatColor.GOLD + "/" + command.getLabel() + " " + e.mw.usage + " &c:" + e.err.getMessage());
 			}
 			for (String msg : usages){
 				sendMessage(sender, msg);}
@@ -345,6 +348,23 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 			try{
 				if (CommandSender.class == clazz){
 					objs[objIndex] = sender;
+				} else if (Map.class == clazz) {
+					Map<Integer, String> map = new HashMap<Integer, String>();
+					int mapIndex = 0;
+					for (String s : args) {
+						map.put(mapIndex, s);
+						mapIndex = mapIndex + 1;
+					}
+					objs[objIndex] = map;
+				} else if (Set.class == clazz) {
+					Set<String> set = new HashSet<String>(Arrays.asList(args));
+					objs[objIndex] = set;
+				} else if (List.class == clazz) {
+					List<String> list = Arrays.asList(args);
+					objs[objIndex] = list;
+				} else if (Collection.class == clazz) {
+					Collection<String> c = Arrays.asList(args);
+					objs[objIndex] = c;
 				} else if (String[].class == clazz){
 					objs[objIndex] = args;
 				} else if (Object[].class == clazz){
@@ -361,7 +381,7 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 				if (usedString.get()){
 					strIndex++;}
 			} catch (ArrayIndexOutOfBoundsException e){
-				throw new IllegalArgumentException("You didnt supply enough arguments for this method");
+				throw new IllegalArgumentException("You didn't supply enough arguments for this method");
 			}
 			objIndex++;
 		}
@@ -381,7 +401,7 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 
 	protected Object verifySender(CommandSender sender, Class<?> clazz) {
 		if (!clazz.isAssignableFrom(sender.getClass())){
-			throw new IllegalArgumentException("sender must be a " + clazz.getSimpleName());}
+			throw new IllegalArgumentException("Sender must be a " + clazz.getSimpleName());}
 		return sender;
 	}
 
