@@ -1,6 +1,6 @@
-package mc.alk.v1r7.controllers;
+package mc.alk.v1r9.controllers;
 
-import mc.alk.v1r7.util.Log;
+import mc.alk.v1r9.util.Log;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Bukkit;
