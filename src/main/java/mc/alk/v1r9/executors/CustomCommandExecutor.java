@@ -15,7 +15,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
+import mc.alk.v1r9.util.Log;
 import mc.euro.bukkitinterface.BukkitInterface;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -290,14 +292,15 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 	}
 
 	public static final String ONLY_INGAME =ChatColor.RED+"You need to be in game to use this command";
-	protected Arguments verifyArgs(MethodWrapper mwrapper, MCCommand cmd,
-			CommandSender sender, Command command, String label, String[] args, int startIndex) throws IllegalArgumentException{
+	protected Arguments verifyArgs(MethodWrapper mwrapper, MCCommand cmd, CommandSender sender,
+								   Command command, String label, String[] args, int startIndex) throws IllegalArgumentException{
 		if (DEBUG){
-			System.out.println(" method="+mwrapper.method.getName() + " verifyArgs " + cmd +" sender=" +sender+", label=" + label+" args="+args);
+			Log.info(" method="+mwrapper.method.getName() + " verifyArgs " + cmd +" sender=" +sender+
+					", label=" + label+" args="+ Arrays.toString(args));
 			for (String arg: args){
-				System.out.println(" -- arg=" +arg);}
+				Log.info(" -- arg=" +arg);}
 			for (Class<?> t: mwrapper.method.getParameterTypes()){
-				System.out.println(" -- type=" +t);}
+				Log.info(" -- type=" +t);}
 		}
 		final int paramLength = mwrapper.method.getParameterTypes().length;
 
@@ -339,10 +342,9 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 
 		newArgs.args = objs; /// Set our return object with the new castable arguments
 		objs[0] = verifySender(sender, types[0]);
-		AtomicBoolean usedString = new AtomicBoolean();
+		AtomicInteger numUsedStrings = new AtomicInteger(0);
 		for (int i=1;i<types.length;i++){
 			Class<?> clazz = types[i];
-			usedString.set(false);
 			try{
 				if (CommandSender.class == clazz){
 					objs[objIndex] = sender;
@@ -368,16 +370,16 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 				} else if (Object[].class == clazz){
 					objs[objIndex] =args;
 				} else {
-					String str = strIndex < args.length ? args[strIndex] : null;
-					objs[objIndex] = verifyArg(clazz, command, str, usedString);
+					objs[objIndex] = verifyArg(sender, clazz, command, args, strIndex, numUsedStrings);
 					if (objs[objIndex] == null){
 						throw new IllegalArgumentException("Argument " + args[strIndex] + " can not be null");
 					}
 				}
-				if (DEBUG)System.out.println("   " + objIndex + " : " + strIndex + "  " +
-						(args.length > strIndex ? args[strIndex] : null ) + " <-> " + objs[objIndex] +" !!!!!!!!!!!!!!!!!!!!!!!!!!! Cs = " + clazz.getCanonicalName());
-				if (usedString.get()){
-					strIndex++;}
+				if (DEBUG)Log.info("   " + objIndex + " : " + strIndex + "  " +
+						(args.length > strIndex ? args[strIndex] : null ) + " <-> " + objs[objIndex] +" !!! Cs = " +
+						clazz.getCanonicalName());
+				if (numUsedStrings.get() > 0){
+					strIndex+=numUsedStrings.get();}
 			} catch (ArrayIndexOutOfBoundsException e){
 				throw new IllegalArgumentException("You didn't supply enough arguments for this method");
 			}
@@ -395,6 +397,35 @@ public abstract class CustomCommandExecutor implements CommandExecutor
 			}
 		}
 		return newArgs; /// Success
+	}
+
+	protected Object verifyArg(CommandSender sender, Class<?> clazz, Command command, String[] args, int curIndex, AtomicInteger numUsedStrings) {
+		numUsedStrings.set(0);
+		if (Command.class == clazz) {
+			return command;
+		}
+		String string = args[curIndex];
+		if (string == null)
+			throw new ArrayIndexOutOfBoundsException();
+		numUsedStrings.set(1);
+		if (Player.class == clazz) {
+			return verifyPlayer(string);
+		} else if (OfflinePlayer.class == clazz) {
+			return verifyOfflinePlayer(string);
+		} else if (String.class == clazz) {
+			return string;
+		} else if (Integer.class == clazz || int.class == clazz) {
+			return verifyInteger(string);
+		} else if (Boolean.class == clazz || boolean.class == clazz) {
+			return Boolean.parseBoolean(string);
+		} else if (Object.class == clazz) {
+			return string;
+		} else if (Float.class == clazz || float.class == clazz) {
+			return verifyFloat(string);
+		} else if (Double.class == clazz || double.class == clazz) {
+			return verifyDouble(string);
+		}
+		return null;
 	}
 
 	protected Object verifySender(CommandSender sender, Class<?> clazz) {
