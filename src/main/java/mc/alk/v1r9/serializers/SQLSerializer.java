@@ -134,7 +134,7 @@ public abstract class SQLSerializer{
 		try {con.close();} catch (SQLException e) {e.printStackTrace();}
 	}
 
-	protected boolean init() {
+	public boolean init() {
 		Connection con = null;  /// Our database connection
 		try {
 			Class.forName(TYPE.getDriver());
