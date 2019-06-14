@@ -89,5 +89,4 @@ public class BaseConfig {
 		this.file = file;
 		reloadFile();
 	}
-
 }
