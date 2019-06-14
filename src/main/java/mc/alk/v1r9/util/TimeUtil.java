@@ -36,6 +36,11 @@ public class TimeUtil {
 	public static String convertToString(int minutes, int seconds){
 		return convertSecondsToString(minutes*60+seconds);
 	}
+
+	public static String convertMillisToString(long t){
+		return convertSecondsToString(t/1000);
+	}
+
 	public static String convertSecondsToString(long t){
 		long s = t % 60;
 		t /= 60;
