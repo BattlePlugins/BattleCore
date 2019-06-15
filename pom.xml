@@ -151,9 +151,10 @@
     </plugins>
   </build>
   <distributionManagement>
-    <repository>
-      <id>rainbowcraft-repo</id>
-      <url>scp://rainbowcraft.sytes.net/var/www/maven/repository</url>
-    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>2b6b7c27958d-snapshots</name>
+      <url>https://artifactory.battleplugins.org/artifactory/libs-snapshot-local</url>
+    </snapshotRepository>
   </distributionManagement>
 </project>
