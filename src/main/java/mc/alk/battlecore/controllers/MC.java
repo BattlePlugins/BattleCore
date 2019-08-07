@@ -1,4 +1,4 @@
-package mc.alk.v1r7.controllers;
+package mc.alk.battlecore.controllers;
 
 import java.io.File;
 import java.util.Formatter;
