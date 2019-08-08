@@ -1,8 +1,5 @@
 package mc.alk.battlecore.util;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.text.StrBuilder;
-
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -16,9 +13,9 @@ public class StringUtil {
         } else {
             Object first = iterator.next();
             if (!iterator.hasNext()) {
-                return ObjectUtils.toString(first);
+                return first == null ? "" : first.toString();
             } else {
-                StrBuilder buf = new StrBuilder(256);
+                StringBuilder buf = new StringBuilder(256);
                 if (first != null) {
                     buf.append(first);
                 }
