@@ -2,8 +2,8 @@ package mc.alk.battlecore.nukkit;
 
 import cn.nukkit.plugin.PluginDescription;
 import mc.alk.battlecore.util.Log;
-import mc.alk.bukkit.BukkitServer;
 import mc.alk.mc.MCServer;
+import mc.alk.nukkit.NukkitServer;
 import mc.alk.nukkit.plugin.NukkitPlugin;
 
 import java.io.File;
@@ -18,6 +18,8 @@ public class NukkitBattlePlugin extends NukkitPlugin {
 
     @Override
     public void onEnable() {
+        MCServer.setInstance(new NukkitServer());
+
         PluginDescription pdfFile = getDescription();
         pluginname = pdfFile.getName();
         version = pdfFile.getVersion();
