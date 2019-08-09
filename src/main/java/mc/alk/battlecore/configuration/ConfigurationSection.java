@@ -154,6 +154,18 @@ public class ConfigurationSection extends LinkedHashMap<String, Object> {
         return get(key) instanceof Double;
     }
 
+    public float getFloat(String key) {
+        return getFloat(key, 0);
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        return get(key, ((Number) defaultValue)).floatValue();
+    }
+
+    public boolean isFloat(String key) {
+        return get(key) instanceof Float;
+    }
+
     public String getString(String key) {
         return getString(key, "");
     }

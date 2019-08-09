@@ -304,6 +304,18 @@ public class Configuration {
         return section.isDouble(key);
     }
 
+    public float getFloat(String key) {
+        return getFloat(key, 0);
+    }
+
+    public float getFloat(String key, float defaultValue) {
+        return valid ? section.get(key, ((Number) defaultValue)).floatValue() : defaultValue;
+    }
+
+    public boolean isFloat(String key) {
+        return section.get(key) instanceof Float;
+    }
+
     public String getString(String key) {
         return getString(key, "");
     }
