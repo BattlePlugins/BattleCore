@@ -10,16 +10,20 @@ import org.bukkit.event.server.PluginEnableEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-
 public class MoneyController implements Listener{
 
-	static boolean initialized = false;
-    static boolean hasVault = false;
-    static boolean useBank = false;
+	private static boolean initialized = false;
+    private static boolean hasVault = false;
+    private static boolean useBank = false;
 
-    public static Economy economy = null;
+    private static Economy economy = null;
+
     public static boolean hasEconomy(){
         return initialized;
+    }
+
+    public static Economy getEconomy() {
+        return economy;
     }
 
     public static boolean hasAccount(String name) {

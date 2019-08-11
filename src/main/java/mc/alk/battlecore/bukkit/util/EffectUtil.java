@@ -1,13 +1,14 @@
-package mc.alk.battlecore.util;
-
-import java.util.Collection;
-import java.util.HashMap;
+package mc.alk.battlecore.bukkit.util;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 public class EffectUtil {
+
     static final String version = "2.1.2";
     static final HashMap<PotionEffectType, String> effectToName = new HashMap<PotionEffectType, String>();
     static final HashMap<String, PotionEffectType> nameToEffect = new HashMap<String, PotionEffectType>();

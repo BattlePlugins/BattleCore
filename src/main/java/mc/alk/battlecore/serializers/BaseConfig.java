@@ -4,35 +4,46 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import mc.alk.battlecore.configuration.Configuration;
+import mc.alk.battlecore.configuration.ConfigurationSection;
+import mc.alk.battlecore.configuration.ConfigurationType;
 import mc.alk.battlecore.util.Log;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.yaml.snakeyaml.error.YAMLException;
 
 public class BaseConfig {
 
-    protected FileConfiguration config;
+    protected Configuration config;
     protected File file = null;
 
-    public int getInt(String node,int defaultValue) {return config.getInt(node, defaultValue);}
+    public BaseConfig(){
 
-    public boolean getBoolean(String node, boolean defaultValue) {return config.getBoolean(node, false);}
-
-    public double getDouble(String node, double defaultValue) {return config.getDouble(node, defaultValue);}
-
-    public String getString(String node,String defaultValue) {return config.getString(node,defaultValue);}
-
-    public ConfigurationSection getConfigurationSection(String node) {return config.getConfigurationSection(node);}
-
-    public BaseConfig(){}
+    }
 
     public BaseConfig(File file){
         setConfig(file);
     }
 
-    public FileConfiguration getConfig() {
+    public int getInt(String node,int defaultValue) {
+        return config.getInt(node, defaultValue);
+    }
+
+    public boolean getBoolean(String node, boolean defaultValue) {
+        return config.getBoolean(node, false);
+    }
+
+    public double getDouble(String node, double defaultValue) {
+        return config.getDouble(node, defaultValue);
+    }
+
+    public String getString(String node,String defaultValue) {
+        return config.getString(node,defaultValue);
+    }
+
+    public ConfigurationSection getConfigurationSection(String node) {
+        return config.getSection(node);
+    }
+
+    public Configuration getConfig() {
         return config;
     }
 
@@ -56,11 +67,10 @@ public class BaseConfig {
             }
         }
 
-        config = new YamlConfiguration();
         try {
-            config.load(file);
-        } catch(YAMLException e1) {
-            Log.warn(e1.getMessage());
+            config = new Configuration(file);
+        } catch(YAMLException ex) {
+            Log.warn(ex.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -70,17 +80,17 @@ public class BaseConfig {
 
     public void reloadFile(){
         try {
-            config.load(file);
-        } catch (Exception e) {
-            e.printStackTrace();
+            config.reload();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     public void save() {
         try {
-            config.save(file);
-        } catch (IOException e) {
-            e.printStackTrace();
+            config.save();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

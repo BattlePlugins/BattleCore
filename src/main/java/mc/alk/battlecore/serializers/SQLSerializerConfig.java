@@ -1,14 +1,13 @@
 package mc.alk.battlecore.serializers;
 
+import mc.alk.battlecore.configuration.ConfigurationSection;
 import mc.alk.battlecore.serializers.SQLSerializer.SQLType;
 import mc.alk.battlecore.util.Log;
-
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.plugin.java.JavaPlugin;
+import mc.alk.mc.plugin.MCPlugin;
 
 public class SQLSerializerConfig {
 
-    public static void configureSQL(JavaPlugin plugin, SQLSerializer sql, ConfigurationSection cs) {
+    public static void configureSQL(MCPlugin plugin, SQLSerializer sql, ConfigurationSection cs) {
         String type = cs.getString("type");
         String url = cs.getString("url");
         if (type != null && type.equalsIgnoreCase("sqlite")){
@@ -43,5 +42,4 @@ public class SQLSerializerConfig {
             e.printStackTrace();
         }
     }
-
 }
