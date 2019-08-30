@@ -2,7 +2,7 @@ package mc.alk.battlecore.util;
 
 import mc.alk.battlecore.configuration.ConfigurationSection;
 import mc.alk.mc.MCLocation;
-import mc.alk.mc.MCServer;
+import mc.alk.mc.MCPlatform;
 import mc.alk.mc.StringLocation;
 import mc.alk.mc.block.MCBlock;
 
@@ -51,7 +51,7 @@ public class SerializerUtil {
         if (scan.hasMoreTokens()){pitch = Float.valueOf(scan.nextToken());}
 
         if (TESTING)
-            return MCServer.getLocation(world, x, y, z);
+            return MCPlatform.getLocation(world, x, y, z);
 
         return new StringLocation(world, x, y, z, pitch, yaw);
     }

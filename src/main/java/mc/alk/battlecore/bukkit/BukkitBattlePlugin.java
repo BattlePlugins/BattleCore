@@ -1,15 +1,12 @@
 package mc.alk.battlecore.bukkit;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import mc.alk.battlecore.util.Log;
-import mc.alk.bukkit.BukkitServer;
+import mc.alk.bukkit.BukkitPlatform;
 import mc.alk.bukkit.plugin.BukkitPlugin;
 
-import mc.alk.mc.MCServer;
+import mc.alk.mc.MCPlatform;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 public class BukkitBattlePlugin extends BukkitPlugin {
@@ -19,7 +16,7 @@ public class BukkitBattlePlugin extends BukkitPlugin {
 
     @Override
     public void onEnable() {
-        MCServer.setInstance(new BukkitServer());
+        MCPlatform.setInstance(new BukkitPlatform());
         PluginDescriptionFile pdfFile = getDescription();
         pluginname = pdfFile.getName();
         version = pdfFile.getVersion();

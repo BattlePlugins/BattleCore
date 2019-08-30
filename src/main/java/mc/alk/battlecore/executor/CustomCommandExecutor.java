@@ -21,8 +21,8 @@ import mc.alk.battlecore.util.Log;
 import mc.alk.battlecore.util.StringUtil;
 import mc.alk.mc.ChatColor;
 import mc.alk.mc.MCOfflinePlayer;
+import mc.alk.mc.MCPlatform;
 import mc.alk.mc.MCPlayer;
-import mc.alk.mc.MCServer;
 import mc.alk.mc.command.MCCommandExecutor;
 import mc.alk.mc.command.MCCommandSender;
 import mc.alk.mc.command.MCConsoleCommandSender;
@@ -600,11 +600,11 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 	public static MCPlayer findPlayer(String name) {
 		if (name == null)
 			return null;
-		MCPlayer foundPlayer = MCServer.getPlayer(name);
+		MCPlayer foundPlayer = MCPlatform.getPlayer(name);
 		if (foundPlayer != null)
 			return foundPlayer;
 
-		for (MCPlayer player : MCServer.getOnlinePlayers()) {
+		for (MCPlayer player : MCPlatform.getOnlinePlayers()) {
 			String playerName = player.getName();
 
 			if (playerName.equalsIgnoreCase(name)) {
@@ -626,9 +626,9 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 	public static MCOfflinePlayer findOfflinePlayer(String name) {
 		MCPlayer player = findPlayer(name);
 		if (player != null){
-			return MCServer.getOfflinePlayer(name);
+			return MCPlatform.getOfflinePlayer(name);
 		} else{
-			MCOfflinePlayer offlinePlayer = MCServer.getOfflinePlayer(name);
+			MCOfflinePlayer offlinePlayer = MCPlatform.getOfflinePlayer(name);
 			if (offlinePlayer != null)
 				return offlinePlayer;
 

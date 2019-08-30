@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import mc.alk.battlecore.configuration.Configuration;
-import mc.alk.mc.MCServer;
+import mc.alk.mc.MCPlatform;
 import mc.alk.mc.logger.MCLogger;
 import mc.alk.mc.plugin.MCPlugin;
 
@@ -96,7 +96,7 @@ public class Metrics {
         if (data == null) {
             throw new IllegalArgumentException("Data cannot be null!");
         }
-        if (MCServer.isMainThread()) {
+        if (MCPlatform.isMainThread()) {
             throw new IllegalAccessException("This method must not be called from the main thread!");
         }
         if (logSentData) {
@@ -224,9 +224,9 @@ public class Metrics {
      */
     private JsonObject getServerData() {
         // Minecraft specific data
-        int playerAmount = MCServer.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
-        int onlineMode = MCServer.isOnlineMode() ? 1 : 0;
-        String bukkitVersion = MCServer.getVersion();
+        int playerAmount = MCPlatform.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
+        int onlineMode = MCPlatform.isOnlineMode() ? 1 : 0;
+        String bukkitVersion = MCPlatform.getVersion();
 
         // OS/Java specific data
         String javaVersion = System.getProperty("java.version");
