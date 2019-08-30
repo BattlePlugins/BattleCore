@@ -543,7 +543,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 			sendMessage(sender, "&eShowing page &6"+page +"/"+npages +"&6 : /"+command.getLabel()+" help <page number>");
 			sendMessage(sender, "&e    command &6"+command.getLabel()+"&e has aliases: &6" + aliases);
 		} else {
-			sendMessage(sender, "&eShowing page &6"+page +"/"+npages +"&6 : /cmd help <page number>");
+			sendMessage(sender, "&eShowing page &6"+page +"/"+npages +"&6 : /" + command.getLabel() + " help <page number>");
 		}
 		int i=0;
 		for (String use : available){
