@@ -21,6 +21,7 @@ public class BukkitBattlePlugin extends BukkitPlugin {
         pluginname = pdfFile.getName();
         version = pdfFile.getVersion();
 
+        Log.setPlugin(this);
         Log.info(getVersion() + " enabled!");
     }
 
