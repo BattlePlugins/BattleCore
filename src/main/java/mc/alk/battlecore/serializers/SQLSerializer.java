@@ -14,6 +14,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import mc.alk.mc.APIType;
+import mc.alk.mc.MCPlatform;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
@@ -173,13 +175,15 @@ public abstract class SQLSerializer {
 
     protected boolean init() {
         Connection con = null;  /// Our database connection
-        try {
-            Class.forName(TYPE.getDriver());
-            if (DEBUG) System.out.println("Got Driver " + TYPE.getDriver());
-        } catch (ClassNotFoundException e1) {
-            System.err.println("Failed getting driver " + TYPE.getDriver());
-            e1.printStackTrace();
-            return false;
+        if (MCPlatform.getType() != APIType.SPONGE) {
+            try {
+                Class.forName(TYPE.getDriver());
+                if (DEBUG) System.out.println("Got Driver " + TYPE.getDriver());
+            } catch (ClassNotFoundException e1) {
+                System.err.println("Failed getting driver " + TYPE.getDriver());
+                e1.printStackTrace();
+                return false;
+            }
         }
         String connectionString = null,datasourceString = null;
         final int minIdle;
