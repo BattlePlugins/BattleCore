@@ -201,12 +201,12 @@ public class Metrics {
     public JsonObject getPluginData() {
         JsonObject data = new JsonObject();
 
-        data.addProperty("pluginName", plugin.getName()); // Append the name of the plugin
-        data.addProperty("pluginVersion", plugin.getVersion()); // Append the version of the plugin
+        data.addProperty("pluginName", plugin.getDescription().getName()); // Append the name of the plugin
+        data.addProperty("pluginVersion", plugin.getDescription().getVersion()); // Append the version of the plugin
         JsonArray customCharts = new JsonArray();
         for (CustomChart customChart : charts) {
             // Add the data of the custom charts
-            JsonObject chart = customChart.getRequestJsonObject(plugin.getMCLogger());
+            JsonObject chart = customChart.getRequestJsonObject(plugin.getLogger());
             if (chart == null) { // If the chart is null, we skip it
                 continue;
             }
@@ -265,11 +265,11 @@ public class Metrics {
         new Thread(() -> {
             try {
                 // Send the data
-                sendData(plugin.getMCLogger(), data);
+                sendData(plugin.getLogger(), data);
             } catch (Exception ex) {
                 // Something went wrong! :(
                 if (logFailedRequests) {
-                    plugin.getMCLogger().warning("Could not submit plugin stats of " + plugin.getMCLogger());
+                    plugin.getLogger().warning("Could not submit plugin stats of " + plugin.getDescription().getName());
                     ex.printStackTrace();
                 }
             }

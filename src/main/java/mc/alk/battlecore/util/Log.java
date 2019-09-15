@@ -8,15 +8,15 @@ public class Log {
     private static MCPlugin plugin;
 
     public static void info(String msg){
-        plugin.getMCLogger().info(colorChat(msg));
+        plugin.getLogger().info(colorChat(msg));
     }
 
     public static void warn(String msg){
-        plugin.getMCLogger().warning(colorChat(msg));
+        plugin.getLogger().warning(colorChat(msg));
     }
 
     public static void err(String msg){
-        plugin.getMCLogger().error(colorChat(msg));
+        plugin.getLogger().error(colorChat(msg));
     }
 
     public static String colorChat(String msg) {
@@ -24,11 +24,11 @@ public class Log {
     }
 
     public static void debug(String string) {
-        plugin.getMCLogger().debug(string);
+        plugin.getLogger().debug(string);
     }
 
     public static void setDebug(boolean debug) {
-        plugin.getMCLogger().setDebug(debug);
+        plugin.getLogger().setDebug(debug);
     }
 
     public static void setPlugin(MCPlugin plugin) {
