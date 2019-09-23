@@ -17,7 +17,7 @@ public class ConfigurationSection extends LinkedHashMap<String, Object> {
     }
 
     public ConfigurationSection(String key, Object value) {
-        set(key, value);
+        set(String.valueOf(key), value);
     }
 
     public ConfigurationSection(Map<String, Object> map) {
@@ -26,11 +26,11 @@ public class ConfigurationSection extends LinkedHashMap<String, Object> {
 
         for (Map.Entry<String, Object> entrySet : map.entrySet()) {
             if (entrySet.getValue() instanceof LinkedHashMap) {
-                put(entrySet.getKey(), new ConfigurationSection((LinkedHashMap) entrySet.getValue()));
+                put(String.valueOf(entrySet.getKey()), new ConfigurationSection((LinkedHashMap) entrySet.getValue()));
             } else if (entrySet.getValue() instanceof List) {
-                put(entrySet.getKey(), parseList((List<?>) entrySet.getValue()));
+                put(String.valueOf(entrySet.getKey()), parseList((List<?>) entrySet.getValue()));
             } else {
-                put(entrySet.getKey(), entrySet.getValue());
+                put(String.valueOf(entrySet.getKey()), entrySet.getValue());
             }
         }
     }

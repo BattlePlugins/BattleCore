@@ -13,14 +13,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.regex.Pattern;
 
 /**
@@ -34,8 +32,6 @@ public class Configuration {
     private File file;
 
     private boolean valid;
-
-    public static final Map<String, Integer> FORMAT = new TreeMap<>();
 
     public Configuration() {
         this(ConfigurationType.YAML);
@@ -247,7 +243,6 @@ public class Configuration {
         return get(key, null);
     }
 
-    @SuppressWarnings("unchecked")
     public <T> T get(String key, T defaultValue) {
         return valid ? section.get(key, defaultValue) : defaultValue;
     }
@@ -509,7 +504,6 @@ public class Configuration {
                 Yaml yaml = new Yaml(dumperOptions);
                 section = new ConfigurationSection(yaml.loadAs(content, LinkedHashMap.class));
                 break;
-            // case Config.SERIALIZED
             case CNF:
             case ENUM:
                 parseList(content);
@@ -529,7 +523,6 @@ public class Configuration {
     public Set<String> getKeys(boolean child) {
         if (valid)
             return section.getKeys(child);
-
 
         return new HashSet<>();
     }

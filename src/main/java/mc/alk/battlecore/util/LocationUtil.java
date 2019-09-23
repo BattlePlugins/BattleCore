@@ -15,7 +15,7 @@ public class LocationUtil {
         float pitch = 0;
         float yaw = 0;
 
-        if (locStr.length() >= 6) {
+        if (split.length >= 6) {
             pitch = Float.parseFloat(split[4]);
             yaw = Float.parseFloat(split[5]);
         }
