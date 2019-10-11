@@ -20,7 +20,7 @@ public class LocationUtil {
             yaw = Float.parseFloat(split[5]);
         }
 
-        return MCPlatform.getLocation(split[0], x, y, z, pitch, yaw);
+        return MCPlatform.getPlatform().getLocation(split[0], x, y, z, pitch, yaw);
     }
 
     public static String toString(MCLocation location) {

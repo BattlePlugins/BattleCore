@@ -600,11 +600,11 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 	public static MCPlayer findPlayer(String name) {
 		if (name == null)
 			return null;
-		MCPlayer foundPlayer = MCPlatform.getPlayer(name);
+		MCPlayer foundPlayer = MCPlatform.getPlatform().getPlayer(name);
 		if (foundPlayer != null)
 			return foundPlayer;
 
-		for (MCPlayer player : MCPlatform.getOnlinePlayers()) {
+		for (MCPlayer player : MCPlatform.getPlatform().getOnlinePlayers()) {
 			String playerName = player.getName();
 
 			if (playerName.equalsIgnoreCase(name)) {
@@ -612,7 +612,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 				break;
 			}
 
-			if (playerName.toLowerCase().indexOf(name.toLowerCase()) != -1) {
+			if (playerName.toLowerCase().contains(name.toLowerCase())) {
 				if (foundPlayer != null) {
 					return null;}
 
@@ -626,9 +626,9 @@ public class CustomCommandExecutor implements MCCommandExecutor {
 	public static MCOfflinePlayer findOfflinePlayer(String name) {
 		MCPlayer player = findPlayer(name);
 		if (player != null){
-			return MCPlatform.getOfflinePlayer(name);
+			return MCPlatform.getPlatform().getOfflinePlayer(name);
 		} else{
-			MCOfflinePlayer offlinePlayer = MCPlatform.getOfflinePlayer(name);
+			MCOfflinePlayer offlinePlayer = MCPlatform.getPlatform().getOfflinePlayer(name);
 			if (offlinePlayer != null)
 				return offlinePlayer;
 

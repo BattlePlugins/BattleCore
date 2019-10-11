@@ -51,7 +51,7 @@ public class SerializerUtil {
         if (scan.hasMoreTokens()){pitch = Float.valueOf(scan.nextToken());}
 
         if (TESTING)
-            return MCPlatform.getLocation(world, x, y, z);
+            return MCPlatform.getPlatform().getLocation(world, x, y, z);
 
         return new StringLocation(world, x, y, z, pitch, yaw);
     }

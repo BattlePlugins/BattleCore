@@ -96,7 +96,7 @@ public class Metrics {
         if (data == null) {
             throw new IllegalArgumentException("Data cannot be null!");
         }
-        if (MCPlatform.isMainThread()) {
+        if (MCPlatform.getPlatform().isMainThread()) {
             throw new IllegalAccessException("This method must not be called from the main thread!");
         }
         if (logSentData) {
@@ -224,9 +224,9 @@ public class Metrics {
      */
     private JsonObject getServerData() {
         // Minecraft specific data
-        int playerAmount = MCPlatform.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
-        int onlineMode = MCPlatform.isOnlineMode() ? 1 : 0;
-        String bukkitVersion = MCPlatform.getVersion();
+        int playerAmount = MCPlatform.getPlatform().getOnlinePlayers().size(); // Just use the new method if the Reflection failed
+        int onlineMode = MCPlatform.getPlatform().isOnlineMode() ? 1 : 0;
+        String bukkitVersion = MCPlatform.getPlatform().getVersion();
 
         // OS/Java specific data
         String javaVersion = System.getProperty("java.version");

@@ -175,7 +175,7 @@ public abstract class SQLSerializer {
 
     protected boolean init() {
         Connection con = null;  /// Our database connection
-        if (MCPlatform.getType() != APIType.SPONGE) {
+        if (MCPlatform.getAPI() != APIType.SPONGE) {
             try {
                 Class.forName(TYPE.getDriver());
                 if (DEBUG) System.out.println("Got Driver " + TYPE.getDriver());
