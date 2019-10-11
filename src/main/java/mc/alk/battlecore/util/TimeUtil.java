@@ -7,7 +7,7 @@ public class TimeUtil {
     static final String version = "1.1";
 
     public static String convertToString(int minutes, int seconds){
-        return convertSecondsToString(minutes*60+seconds);
+        return convertSecondsToString(minutes * 60 + seconds);
     }
 
     public static String convertSecondsToString(long t){
@@ -22,23 +22,23 @@ public class TimeUtil {
         boolean has = false;
         StringBuilder sb = new StringBuilder();
         if (d > 0) {
-            has=true;
-            sb.append("&6"+ d +"&e "+dayOrDays(d));
+            has = true;
+            sb.append(d).append(" ").append(dayOrDays(d)).append(" ");
         }
         if (h > 0) {
-            has=true;
-            sb.append("&6"+ h +"&e "+hourOrHours(h));
+            has = true;
+            sb.append(h).append("&e ").append(hourOrHours(h)).append(" ");
         }
         if (m > 0) {
-            has=true;
-            sb.append("&6"+ m +"&e "+minOrMins(m));
+            has = true;
+            sb.append(m).append(" ").append(minOrMins(m)).append(" ");
         }
         if (s > 0) {
-            has=true;
-            sb.append("&6"+ s +"&e "+secOrSecs(s));
+            has = true;
+            sb.append(s).append(" ").append(secOrSecs(s)).append(" ");
         }
         if (!has){
-            return "&60";
+            return "0";
         }
         return sb.toString();
     }
@@ -48,29 +48,62 @@ public class TimeUtil {
         return convertSecondsToString(t);
     }
 
-    public static String dayOrDays(long t){
-        return t > 1 || t == 0? "days" : "day";
+    public static String convertSecondsToShortString(long t){
+        long s = t % 60;
+        t /= 60;
+        long m = t %60;
+        t /= 60;
+        long h = t % 24;
+        t /= 24;
+        long d = t;
+
+        boolean has = false;
+        StringBuilder sb = new StringBuilder();
+        if (d > 0) {
+            has = true;
+            sb.append(d).append("d ");
+        }
+        if (h > 0) {
+            has = true;
+            sb.append(h).append("h ");
+        }
+        if (m > 0) {
+            has = true;
+            sb.append(m).append("m ");
+        }
+        if (s > 0) {
+            has = true;
+            sb.append(s).append("s ");
+        }
+        if (!has){
+            return "";
+        }
+        return sb.toString();
     }
 
-    public static String hourOrHours(long t){
-        return t > 1 || t ==0 ? "hours" : "hour";
+    public static String convertToShortString(long t){
+        t = t / 1000;
+        return convertSecondsToShortString(t);
     }
 
-    public static String minOrMins(long t){
-        return t > 1 || t == 0? "minutes" : "minute";
+    private static String dayOrDays(long t){
+        return t > 1 || t == 0 ? "days" : "day";
     }
 
-    public static String secOrSecs(long t){
-        return t > 1 || t == 0? "sec" : "secs";
+    private static String hourOrHours(long t){
+        return t > 1 || t == 0 ? "hours" : "hour";
+    }
+
+    private static String minOrMins(long t){
+        return t > 1 || t == 0 ? "minutes" : "minute";
+    }
+
+    private static String secOrSecs(long t){
+        return t > 1 || t == 0 ? "second" : "seconds";
     }
 
     public static String convertLongToDate(long time) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd hh:mm:ss");
         return sdf.format(time);
     }
-
-    public static String PorP(int size) {
-        return size == 1 ? "person" : "people";
-    }
-
 }
