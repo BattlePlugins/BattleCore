@@ -117,14 +117,22 @@ public class MessageController {
 
         return true;
     }
-    public static boolean sendMessage(MCCommandSender p, String message){
+
+    public static boolean sendMessage(MCCommandSender sender, String message){
         if (message == null)
             return true;
-        if (p instanceof MCPlayer){
-            if (((MCPlayer) p).isOnline())
-                p.sendMessage(MessageController.colorChat(message));
-        } else {
-            p.sendMessage(MessageController.colorChat(message));
+
+        sender.sendMessage(MessageController.colorChat(message));
+        return true;
+    }
+
+    public boolean sendMultilineMessage(MCCommandSender sender, String message){
+        if (message == null)
+            return true;
+
+        String[] messages = message.split("\n");
+        for (String msg : messages){
+            sendMessage(sender, msg);
         }
         return true;
     }
@@ -137,9 +145,5 @@ public class MessageController {
             return false;
         }
         return true;
-    }
-
-    public boolean sendMsg(MCCommandSender sender, String message) {
-        return MessageController.sendMessage(sender, message);
     }
 }

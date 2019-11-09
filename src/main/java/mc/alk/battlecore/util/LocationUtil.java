@@ -3,24 +3,28 @@ package mc.alk.battlecore.util;
 import mc.alk.mc.MCLocation;
 import mc.alk.mc.MCPlatform;
 
+import java.util.StringTokenizer;
+
 public class LocationUtil {
 
     public static MCLocation fromString(String locStr) {
-        String[] split = locStr.split(",");
+        StringTokenizer scan = new StringTokenizer(locStr,",");
 
-        double x = Double.parseDouble(split[1]);
-        double y = Double.parseDouble(split[2]);
-        double z = Double.parseDouble(split[3]);
+        String world = scan.nextToken();
+        double x = Double.parseDouble(scan.nextToken());
+        double y = Double.parseDouble(scan.nextToken());
+        double z = Double.parseDouble(scan.nextToken());
 
         float pitch = 0;
         float yaw = 0;
 
-        if (split.length >= 6) {
-            pitch = Float.parseFloat(split[4]);
-            yaw = Float.parseFloat(split[5]);
-        }
+        if (scan.hasMoreTokens())
+            pitch = Float.parseFloat(scan.nextToken());
 
-        return MCPlatform.getPlatform().getLocation(split[0], x, y, z, pitch, yaw);
+        if (scan.hasMoreTokens())
+            yaw = Float.parseFloat(scan.nextToken());
+
+        return MCPlatform.getPlatform().getLocation(world, x, y, z, pitch, yaw);
     }
 
     public static String toString(MCLocation location) {

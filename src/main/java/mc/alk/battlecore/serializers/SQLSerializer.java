@@ -31,8 +31,6 @@ import org.apache.commons.pool.impl.GenericObjectPool;
  */
 public abstract class SQLSerializer {
 
-    static public final String version = "1.3.2";
-
     static protected final boolean DEBUG = false;
     static final boolean DEBUG_UPDATE = false;
 
@@ -45,8 +43,10 @@ public abstract class SQLSerializer {
      *
      */
     public static enum SQLType {
-        MYSQL("MySQL","com.mysql.jdbc.Driver"), SQLITE("SQLite","org.sqlite.JDBC");
-        String name, driver;
+        MYSQL("MySQL","com.mysql.jdbc.Driver"),
+        SQLITE("SQLite","org.sqlite.JDBC");
+
+        private String name, driver;
         SQLType(String name, String driver){
             this.name = name;
             this.driver = driver;
@@ -57,7 +57,7 @@ public abstract class SQLSerializer {
 
     static public final int MAX_NAME_LENGTH = 16;
 
-    private DataSource ds ;
+    private DataSource ds;
 
     protected String DB = "minecraft";
     protected SQLType TYPE = SQLType.MYSQL;
@@ -164,7 +164,7 @@ public abstract class SQLSerializer {
     }
 
     public void closeConnection(Connection con) {
-        if (con ==null)
+        if (con == null)
             return;
         try {
         	con.close();
@@ -178,14 +178,15 @@ public abstract class SQLSerializer {
         if (MCPlatform.getAPI() != APIType.SPONGE) {
             try {
                 Class.forName(TYPE.getDriver());
-                if (DEBUG) System.out.println("Got Driver " + TYPE.getDriver());
+                if (DEBUG)
+                    System.out.println("Got Driver " + TYPE.getDriver());
             } catch (ClassNotFoundException e1) {
                 System.err.println("Failed getting driver " + TYPE.getDriver());
                 e1.printStackTrace();
                 return false;
             }
         }
-        String connectionString = null,datasourceString = null;
+        String connectionString, datasourceString;
         final int minIdle;
         final int maxActive;
         switch(TYPE){
@@ -231,7 +232,7 @@ public abstract class SQLSerializer {
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public static DataSource setupDataSource(String connectURI, String username, String password,
-            int minIdle, int maxActive) throws Exception {
+            int minIdle, int maxActive) {
         GenericObjectPool connectionPool = new GenericObjectPool(null);
 
         if (minIdle != -1)
@@ -249,11 +250,10 @@ public abstract class SQLSerializer {
         /// validate the connection with this statement (hopefully between this and setTestOnBorrow(true) will
         /// avoid the previous connection timeouts with mysql
         factory.setValidationQuery("select 1");
-        PoolingDataSource dataSource = new PoolingDataSource(connectionPool);
-        return dataSource;
+        return new PoolingDataSource(connectionPool);
     }
 
-    protected boolean createTable(String tableName, String sql_create_table,String... sql_updates) {
+    protected boolean createTable(String tableName, String sql_create_table,String... sqlUpdates) {
         /// Check to see if our table exists;
         Boolean exists;
         if (TYPE == SQLType.SQLITE){
@@ -290,11 +290,11 @@ public abstract class SQLSerializer {
             return false;
         }
         /// Updates and indexes
-        if (sql_updates != null){
-            for (String sql_update: sql_updates){
-                if (sql_update == null)
+        if (sqlUpdates != null){
+            for (String sqlUpdate : sqlUpdates){
+                if (sqlUpdate == null)
                     continue;
-                strStmt = sql_update;
+                strStmt = sqlUpdate;
                 try {
                     st = con.createStatement();
                     result = st.executeUpdate(strStmt);
@@ -318,8 +318,8 @@ public abstract class SQLSerializer {
      * @return Boolean: whether the column exists
      */
     protected Boolean hasColumn(String table, String column){
-        String stmt = null;
-        Boolean b = null;
+        String stmt;
+        Boolean b;
         switch (TYPE){
         case MYSQL:
             stmt = "SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = ? " +
@@ -365,7 +365,7 @@ public abstract class SQLSerializer {
      */
     protected RSCon executeQuery(boolean displayErrors, Integer timeoutSeconds,
             String strRawStmt, Object... varArgs){
-        Connection con = null;
+        Connection con;
         try {
             con = getConnection();
         } catch (SQLException e) {
@@ -407,13 +407,11 @@ public abstract class SQLSerializer {
 
     protected void executeUpdate(final boolean async, final String strRawStmt, final Object... varArgs){
         if (async){
-            new Thread(new Runnable(){
-                public void run() {
-                    try{
-                        executeUpdate(strRawStmt, varArgs);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+            new Thread(() -> {
+                try{
+                    executeUpdate(strRawStmt, varArgs);
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
             }).start();
         } else {
@@ -427,7 +425,7 @@ public abstract class SQLSerializer {
 
     protected int executeUpdate(String strRawStmt, Object... varArgs){
         int result= -1;
-        Connection con = null;
+        Connection con;
         try {
             con = getConnection();
         } catch (SQLException e) {
@@ -452,13 +450,11 @@ public abstract class SQLSerializer {
 
     protected void executeBatch(final boolean async, final String updateStatement, final List<List<Object>> batch) {
         if (async){
-            new Thread(new Runnable(){
-                public void run() {
-                    try{
-                        executeBatch(updateStatement, batch);
-                    } catch (Exception e){
-                        e.printStackTrace();
-                    }
+            new Thread(() -> {
+                try{
+                    executeBatch(updateStatement, batch);
+                } catch (Exception e){
+                    e.printStackTrace();
                 }
             }).start();
         } else {
@@ -471,7 +467,7 @@ public abstract class SQLSerializer {
     }
 
     protected void executeBatch(String updateStatement, List<List<Object>> batch) {
-        Connection con = null;
+        Connection con;
         try {
             con = getConnection();
         } catch (SQLException e) {
@@ -493,8 +489,9 @@ public abstract class SQLSerializer {
 
         for (List<Object> update: batch){
             try{
-                for (int i=0;i<update.size();i++){
-                    if (DEBUG_UPDATE) System.out.println(i+" = " + update.get(i));
+                for (int i = 0; i < update.size(); i++){
+                    if (DEBUG_UPDATE)
+                        System.out.println(i+" = " + update.get(i));
                     ps.setObject(i+1, update.get(i));
                 }
                 if (DEBUG) System.out.println("Executing   =" + ps.toString() +"  raw="+updateStatement);
@@ -529,14 +526,15 @@ public abstract class SQLSerializer {
         PreparedStatement ps = null;
         try{
             ps = con.prepareStatement(strRawStmt);
-            for (int i=0;i<varArgs.length;i++){
-                if (DEBUG_UPDATE) System.out.println(i+" = " + varArgs[i]);
-                ps.setObject(i+1, varArgs[i]);
+            for (int i = 0;i < varArgs.length; i++){
+                if (DEBUG_UPDATE)
+                    System.out.println(i + " = " + varArgs[i]);
+                ps.setObject(i + 1, varArgs[i]);
             }
         } catch (Exception e){
             if (displayErrors){
                 System.err.println("Couldnt prepare statment "  + ps +"   rawStmt='" + strRawStmt +"' args="+varArgs);
-                for (int i=0;i< varArgs.length;i++){
+                for (int i = 0; i < varArgs.length; i++){
                     System.err.println("   arg["+ i+"] = " + varArgs[i]);}
                 e.printStackTrace();
             }
@@ -555,8 +553,12 @@ public abstract class SQLSerializer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
-            try{rscon.con.close();}catch(Exception e){}
+        } finally {
+            try {
+                rscon.con.close();
+            } catch(Exception e){
+
+            }
         }
         return null;
     }
@@ -572,8 +574,12 @@ public abstract class SQLSerializer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            try{rscon.con.close();}catch(Exception e){}
+        } finally {
+            try {
+                rscon.con.close();
+            } catch(Exception e){
+
+            }
         }
         return null;
     }
@@ -589,8 +595,12 @@ public abstract class SQLSerializer {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            try{rscon.con.close();}catch(Exception e){}
+        } finally {
+            try{
+                rscon.con.close();
+            } catch(Exception e){
+
+            }
         }
         return null;
     }
@@ -609,33 +619,37 @@ public abstract class SQLSerializer {
         } finally {
             try {
             	rscon.con.close();
-            } catch(Exception e){}
+            } catch (Exception e){
+
+            }
         }
         return null;
     }
 
     public Boolean getBoolean(String query, Object... varArgs){
-        return getBoolean(true, TIMEOUT, query,varArgs);
+        return getBoolean(true, TIMEOUT, query, varArgs);
     }
 
     protected Boolean getBoolean(boolean displayErrors, Integer timeoutSeconds,
             String query, Object... varArgs){
-        RSCon rscon = executeQuery(displayErrors,timeoutSeconds, query,varArgs);
+        RSCon rscon = executeQuery(displayErrors, timeoutSeconds, query, varArgs);
         if (rscon == null || rscon.con == null)
             return null;
         try {
             ResultSet rs = rscon.rs;
             while (rs.next()){
-                Integer i = rs.getInt(1);
-                if (i==null)
-                    return null;
+                int i = rs.getInt(1);
                 return i > 0;
             }
         } catch (SQLException e) {
             if (displayErrors)
                 e.printStackTrace();
-        }finally{
-            try{rscon.con.close();}catch(Exception e){}
+        } finally {
+            try {
+                rscon.con.close();
+            } catch(Exception e) {
+
+            }
         }
         return null;
     }
@@ -652,7 +666,11 @@ public abstract class SQLSerializer {
         } catch (SQLException e) {
             e.printStackTrace();
         }finally{
-            try{rscon.con.close();}catch(Exception e){}
+            try {
+                rscon.con.close();
+            } catch(Exception e){
+
+            }
         }
         return null;
     }
@@ -666,30 +684,35 @@ public abstract class SQLSerializer {
             while (rs.next()){
                 java.sql.ResultSetMetaData rsmd = rs.getMetaData();
                 int nCol = rsmd.getColumnCount();
-                List<Object> objs = new ArrayList<Object>(nCol);
-                for (int i=0;i<nCol;i++){
-                    objs.add(rs.getObject(i+1));
+                List<Object> objs = new ArrayList<>(nCol);
+                for (int i = 0; i < nCol; i++){
+                    objs.add(rs.getObject(i + 1));
                 }
                 return objs;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }finally{
-            try{rscon.con.close();}catch(Exception e){}
+        } finally {
+            try {
+                rscon.con.close();
+            } catch(Exception e){
+
+            }
         }
         return null;
     }
 
     protected List<Map<String,Object>> convertToResult(RSCon rscon){
-        List<Map<String,Object>> values = new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> values = new ArrayList<>();
         try {
             ResultSet rs = rscon.rs;
             if (rs == null)
                 return null;
+
             ResultSetMetaData rmd = rs.getMetaData();
             while (rs.next()){
-                Map<String,Object> row = new HashMap<String,Object>();
-                for (int i=1;i<rmd.getColumnCount()+1;i++){
+                Map<String,Object> row = new HashMap<>();
+                for (int i = 1; i < rmd.getColumnCount() + 1; i++){
                     row.put(rmd.getColumnName(i), rs.getObject(i));
                 }
                 values.add(row);
