@@ -368,7 +368,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
                 } else if (Object[].class.isAssignableFrom(clazz)){
                     objs[objIndex] = args;
                 } else {
-                    objs[objIndex] = verifyArg(clazz, command, args, strIndex, numUsedStrings);
+                    objs[objIndex] = verifyArg(sender, clazz, command, args, strIndex, numUsedStrings);
                     if (objs[objIndex] == null){
                         throw new IllegalArgumentException("Argument " + args[strIndex] + " can not be null");
                     }
@@ -399,7 +399,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         return newArgs; /// Success
     }
 
-    protected Object verifyArg(Class<?> clazz, mc.alk.mc.command.MCCommand command, String[] args, int curIndex, AtomicInteger numUsedStrings) {
+    protected Object verifyArg(MCCommandSender sender, Class<?> clazz, mc.alk.mc.command.MCCommand command, String[] args, int curIndex, AtomicInteger numUsedStrings) {
         numUsedStrings.set(0);
         if (mc.alk.mc.command.MCCommand.class.isAssignableFrom(clazz)) {
             return command;
