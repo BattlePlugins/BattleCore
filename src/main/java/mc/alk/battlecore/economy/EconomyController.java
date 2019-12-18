@@ -1,6 +1,6 @@
 package mc.alk.battlecore.economy;
 
-import mc.alk.mc.MCOfflinePlayer;
+import org.battleplugins.entity.living.player.OfflinePlayer;
 
 import java.util.OptionalDouble;
 
@@ -8,51 +8,51 @@ public class EconomyController {
 
     private static EconomyHandler handler;
 
-    public static boolean hasAccount(MCOfflinePlayer player) {
+    public static boolean hasAccount(OfflinePlayer player) {
         return handler.hasAccount(player);
     }
 
-    public static boolean hasAccount(MCOfflinePlayer player, String world) {
+    public static boolean hasAccount(OfflinePlayer player, String world) {
         return handler.hasAccount(player, world);
     }
 
-    public static void createAccount(MCOfflinePlayer player) {
+    public static void createAccount(OfflinePlayer player) {
         handler.createAccount(player);
     }
 
-    public static void createAccount(MCOfflinePlayer player, String world) {
+    public static void createAccount(OfflinePlayer player, String world) {
         handler.createAccount(player, world);
     }
 
-    public static OptionalDouble getBalance(MCOfflinePlayer player) {
+    public static OptionalDouble getBalance(OfflinePlayer player) {
         return handler.getBalance(player);
     }
 
-    public static OptionalDouble getBalance(MCOfflinePlayer player, String world) {
+    public static OptionalDouble getBalance(OfflinePlayer player, String world) {
         return handler.getBalance(player, world);
     }
 
-    public static void depositBalance(MCOfflinePlayer player, double balance) {
+    public static void depositBalance(OfflinePlayer player, double balance) {
         handler.depositBalance(player, balance);
     }
 
-    public static void depositBalance(MCOfflinePlayer player, double balance, String world) {
+    public static void depositBalance(OfflinePlayer player, double balance, String world) {
         handler.depositBalance(player, balance, world);
     }
 
-    public static void withdrawBalance(MCOfflinePlayer player, double balance) {
+    public static void withdrawBalance(OfflinePlayer player, double balance) {
         handler.withdrawBalance(player, balance);
     }
 
-    public static void withdrawBalance(MCOfflinePlayer player, double balance, String world) {
+    public static void withdrawBalance(OfflinePlayer player, double balance, String world) {
         handler.withdrawBalance(player, balance, world);
     }
 
-    public static void setBalance(MCOfflinePlayer player, double balance) {
+    public static void setBalance(OfflinePlayer player, double balance) {
         handler.setBalance(player, balance);
     }
 
-    public static void setBalance(MCOfflinePlayer player, double balance, String world) {
+    public static void setBalance(OfflinePlayer player, double balance, String world) {
         handler.setBalance(player, balance, world);
     }
 

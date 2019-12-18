@@ -16,18 +16,21 @@ import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import mc.alk.battlecore.controllers.MessageController;
+import mc.alk.battlecore.message.MessageController;
 import mc.alk.battlecore.util.Log;
 import mc.alk.battlecore.util.PlayerUtil;
 import mc.alk.battlecore.util.StringUtil;
-import mc.alk.mc.ChatColor;
-import mc.alk.mc.MCOfflinePlayer;
-import mc.alk.mc.MCPlayer;
-import mc.alk.mc.command.MCCommandExecutor;
-import mc.alk.mc.command.MCCommandSender;
-import mc.alk.mc.command.MCConsoleCommandSender;
 
-public class CustomCommandExecutor implements MCCommandExecutor {
+import org.battleplugins.ChatColor;
+import org.battleplugins.command.Command;
+import org.battleplugins.command.CommandExecutor;
+import org.battleplugins.command.CommandSender;
+import org.battleplugins.command.ConsoleCommandSender;
+import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.entity.living.player.Player;
+
+// FIXME: Ugly use of optionals and class cleanup
+public class CustomCommandExecutor implements CommandExecutor {
 
     private Map<String, TreeMap<Integer, MethodWrapper>> methods = new HashMap<>();
     private Map<String, Map<String, TreeMap<Integer, MethodWrapper>>> subCmdMethods = new HashMap<>();
@@ -81,11 +84,11 @@ public class CustomCommandExecutor implements MCCommandExecutor {
      * What to display when this happens
      * @param sender
      */
-    protected void showHelp(MCCommandSender sender, mc.alk.mc.command.MCCommand command) {
+    protected void showHelp(CommandSender sender, Command command) {
         showHelp(sender,command,null);
     }
 
-    protected void showHelp(MCCommandSender sender, mc.alk.mc.command.MCCommand command, String[] args) {
+    protected void showHelp(CommandSender sender, Command command, String[] args) {
         help(sender, command, args);
     }
 
@@ -96,7 +99,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
                 continue;
 
             Class<?>[] types = method.getParameterTypes();
-            if (types.length == 0 || !MCCommandSender.class.isAssignableFrom(types[0])){
+            if (types.length == 0 || !CommandSender.class.isAssignableFrom(types[0])){
                 System.err.println("MCCommands must start with a CommandSender,Player, or ArenaPlayer");
                 continue;
             }
@@ -160,9 +163,9 @@ public class CustomCommandExecutor implements MCCommandExecutor {
     }
 
     protected String getUsageString(Class<?> clazz) {
-        if (MCPlayer.class.isAssignableFrom(clazz)){
+        if (Player.class.isAssignableFrom(clazz)){
             return "<player> ";
-        } else if (MCOfflinePlayer.class.isAssignableFrom(clazz)){
+        } else if (OfflinePlayer.class.isAssignableFrom(clazz)){
             return "<player> ";
         } else if (String.class.isAssignableFrom(clazz)){
             return "<string> ";
@@ -193,7 +196,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
     }
 
     @Override
-    public boolean onCommand(MCCommandSender sender, mc.alk.mc.command.MCCommand command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         TreeMap<Integer, MethodWrapper> methodmap = null;
 
         /// No method to handle, show some help
@@ -230,7 +233,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         boolean success = false;
         for (MethodWrapper mwrapper : methodmap.values()){
             mccmd = mwrapper.method.getAnnotation(MCCommand.class);
-            final boolean isOp = sender == null || sender.isOp() || sender instanceof MCConsoleCommandSender;
+            final boolean isOp = sender == null || sender.isOp() || sender instanceof ConsoleCommandSender;
 
             if (mccmd.op() && !isOp || mccmd.admin() && !hasAdminPerms(sender)) /// no op, no pass
                 continue;
@@ -286,8 +289,8 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         e.printStackTrace();
     }
 
-    protected Arguments verifyArgs(MethodWrapper mwrapper, MCCommand cmd, MCCommandSender sender,
-                                   mc.alk.mc.command.MCCommand command, String label, String[] args, int startIndex) throws IllegalArgumentException{
+    protected Arguments verifyArgs(MethodWrapper mwrapper, MCCommand cmd, CommandSender sender,
+                                   Command command, String label, String[] args, int startIndex) throws IllegalArgumentException{
 
         if (DEBUG) {
             Log.info(" method=" + mwrapper.method.getName() + " verifyArgs " + cmd + " sender=" + sender +
@@ -318,8 +321,8 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         if (cmd.exact()!= -1 && args.length != cmd.exact()){
             throw new IllegalArgumentException("You need exactly "+cmd.exact()+" arguments");
         }
-        boolean isPlayer = sender instanceof MCPlayer;
-        boolean isOp = (isPlayer && sender.isOp()) || sender == null || sender instanceof MCConsoleCommandSender;
+        boolean isPlayer = sender instanceof Player;
+        boolean isOp = (isPlayer && sender.isOp()) || sender == null || sender instanceof ConsoleCommandSender;
 
         if (cmd.op() && !isOp)
             throw new IllegalArgumentException("You need to be op to use this command");
@@ -330,7 +333,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         Class<?>[] types = mwrapper.method.getParameterTypes();
 
         //		/// In game check
-        if (types[0] == MCPlayer.class && !isPlayer){
+        if (types[0] == Player.class && !isPlayer){
             throw new IllegalArgumentException(ONLY_INGAME);
         }
         int strIndex = startIndex, objIndex = 1;
@@ -344,7 +347,7 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         for (int i = 1; i < types.length; i++){
             Class<?> clazz = types[i];
             try{
-                if (MCCommandSender.class.isAssignableFrom(clazz)){
+                if (CommandSender.class.isAssignableFrom(clazz)){
                     objs[objIndex] = sender;
                 } else if (Map.class.isAssignableFrom(clazz)) {
                     Map<Integer, String> map = new HashMap<>();
@@ -399,18 +402,18 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         return newArgs; /// Success
     }
 
-    protected Object verifyArg(MCCommandSender sender, Class<?> clazz, mc.alk.mc.command.MCCommand command, String[] args, int curIndex, AtomicInteger numUsedStrings) {
+    protected Object verifyArg(CommandSender sender, Class<?> clazz, Command command, String[] args, int curIndex, AtomicInteger numUsedStrings) {
         numUsedStrings.set(0);
-        if (mc.alk.mc.command.MCCommand.class.isAssignableFrom(clazz)) {
+        if (Command.class.isAssignableFrom(clazz)) {
             return command;
         }
         String string = args[curIndex];
         if (string == null)
             throw new ArrayIndexOutOfBoundsException();
         numUsedStrings.set(1);
-        if (MCPlayer.class.isAssignableFrom(clazz)) {
+        if (Player.class.isAssignableFrom(clazz)) {
             return verifyPlayer(string);
-        } else if (MCOfflinePlayer.class.isAssignableFrom(clazz)) {
+        } else if (OfflinePlayer.class.isAssignableFrom(clazz)) {
             return verifyOfflinePlayer(string);
         } else if (String.class.isAssignableFrom(clazz)) {
             return string;
@@ -428,14 +431,14 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         return null;
     }
 
-    protected Object verifySender(MCCommandSender sender, Class<?> clazz) {
+    protected Object verifySender(CommandSender sender, Class<?> clazz) {
         if (!clazz.isAssignableFrom(sender.getClass())){
             throw new IllegalArgumentException("Sender must be a " + clazz.getSimpleName());}
         return sender;
     }
 
-    protected Object verifyArg(Class<?> clazz, mc.alk.mc.command.MCCommand command, String string, AtomicBoolean usedString) {
-        if (mc.alk.mc.command.MCCommand.class.isAssignableFrom(clazz)){
+    protected Object verifyArg(Class<?> clazz, Command command, String string, AtomicBoolean usedString) {
+        if (Command.class.isAssignableFrom(clazz)){
             usedString.set(false);
             return command;
         }
@@ -443,9 +446,9 @@ public class CustomCommandExecutor implements MCCommandExecutor {
             throw new ArrayIndexOutOfBoundsException();
 
         usedString.set(true);
-        if (MCPlayer.class.isAssignableFrom(clazz)){
+        if (Player.class.isAssignableFrom(clazz)){
             return verifyPlayer(string);
-        } else if (MCOfflinePlayer.class.isAssignableFrom(clazz)){
+        } else if (OfflinePlayer.class.isAssignableFrom(clazz)){
             return verifyOfflinePlayer(string);
         } else if (String.class.isAssignableFrom(clazz)){
             return string;
@@ -463,15 +466,15 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         return null;
     }
 
-    private MCOfflinePlayer verifyOfflinePlayer(String name) throws IllegalArgumentException {
-        MCOfflinePlayer player = PlayerUtil.findOfflinePlayer(name);
+    private OfflinePlayer verifyOfflinePlayer(String name) throws IllegalArgumentException {
+        OfflinePlayer player = PlayerUtil.findOfflinePlayer(name).orElse(null);
         if (player == null)
             throw new IllegalArgumentException("Player " + name + " can not be found");
         return player;
     }
 
-    private MCPlayer verifyPlayer(String name) throws IllegalArgumentException {
-        MCPlayer player = PlayerUtil.findPlayer(name);
+    private Player verifyPlayer(String name) throws IllegalArgumentException {
+        Player player = PlayerUtil.findPlayer(name).orElse(null);
         if (player == null || !player.isOnline())
             throw new IllegalArgumentException(name+" is not online ");
         return player;
@@ -501,11 +504,11 @@ public class CustomCommandExecutor implements MCCommandExecutor {
         }
     }
 
-    protected boolean hasAdminPerms(MCCommandSender sender){
+    protected boolean hasAdminPerms(CommandSender sender){
         return sender.isOp();
     }
 
-    public void help(MCCommandSender sender, mc.alk.mc.command.MCCommand command, String[] args){
+    public void help(CommandSender sender, Command command, String[] args){
         int page = 1;
 
         if (args != null && args.length > 1){

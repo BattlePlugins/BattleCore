@@ -1,11 +1,11 @@
 package mc.alk.battlecore.util;
 
-import mc.alk.battlecore.controllers.MessageController;
-import mc.alk.mc.plugin.MCPlugin;
+import mc.alk.battlecore.message.MessageController;
+import org.battleplugins.plugin.Plugin;
 
 public class Log {
 
-    private static MCPlugin plugin;
+    private static Plugin plugin;
 
     public static void info(String msg){
         plugin.getLogger().info(colorChat(msg));
@@ -31,7 +31,7 @@ public class Log {
         plugin.getLogger().setDebug(debug);
     }
 
-    public static void setPlugin(MCPlugin plugin) {
+    public static void setPlugin(Plugin plugin) {
         Log.plugin = plugin;
     }
 }

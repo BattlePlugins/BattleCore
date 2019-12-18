@@ -2,10 +2,10 @@ package mc.alk.battlecore.bukkit.platform;
 
 import mc.alk.battlecore.bukkit.economy.VaultEconomyHandler;
 import mc.alk.battlecore.economy.EconomyController;
-import mc.alk.mc.plugin.platform.PlatformCodeHandler;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.battleplugins.plugin.platform.PlatformCodeHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 

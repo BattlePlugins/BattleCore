@@ -1,10 +1,11 @@
 package mc.alk.battlecore.bukkit.economy;
 
 import mc.alk.battlecore.economy.EconomyHandler;
-import mc.alk.bukkit.BukkitOfflinePlayer;
-import mc.alk.mc.MCOfflinePlayer;
 
 import net.milkbowl.vault.economy.Economy;
+
+import org.battleplugins.bukkit.entity.living.player.BukkitOfflinePlayer;
+import org.battleplugins.entity.living.player.OfflinePlayer;
 
 import java.util.OptionalDouble;
 
@@ -17,27 +18,27 @@ public class VaultEconomyHandler implements EconomyHandler {
     }
 
     @Override
-    public boolean hasAccount(MCOfflinePlayer player) {
+    public boolean hasAccount(OfflinePlayer player) {
         return economy.hasAccount(((BukkitOfflinePlayer) player).getHandle());
     }
 
     @Override
-    public boolean hasAccount(MCOfflinePlayer player, String world) {
+    public boolean hasAccount(OfflinePlayer player, String world) {
         return economy.hasAccount(((BukkitOfflinePlayer) player).getHandle(), world);
     }
 
     @Override
-    public void createAccount(MCOfflinePlayer player) {
+    public void createAccount(OfflinePlayer player) {
         economy.createPlayerAccount(((BukkitOfflinePlayer) player).getHandle());
     }
 
     @Override
-    public void createAccount(MCOfflinePlayer player, String world) {
+    public void createAccount(OfflinePlayer player, String world) {
         economy.createPlayerAccount(((BukkitOfflinePlayer) player).getHandle(), world);
     }
 
     @Override
-    public OptionalDouble getBalance(MCOfflinePlayer player) {
+    public OptionalDouble getBalance(OfflinePlayer player) {
         if (!hasAccount(player))
             return OptionalDouble.empty();
 
@@ -45,7 +46,7 @@ public class VaultEconomyHandler implements EconomyHandler {
     }
 
     @Override
-    public OptionalDouble getBalance(MCOfflinePlayer player, String world) {
+    public OptionalDouble getBalance(OfflinePlayer player, String world) {
         if (!hasAccount(player, world))
             return OptionalDouble.empty();
 
@@ -53,14 +54,14 @@ public class VaultEconomyHandler implements EconomyHandler {
     }
 
     @Override
-    public void setBalance(MCOfflinePlayer player, double balance) {
+    public void setBalance(OfflinePlayer player, double balance) {
         // Withdraw current amount so account is empty
         economy.withdrawPlayer(((BukkitOfflinePlayer) player).getHandle(), getBalance(player).orElse(0));
         economy.depositPlayer(((BukkitOfflinePlayer) player).getHandle(), balance);
     }
 
     @Override
-    public void setBalance(MCOfflinePlayer player, double balance, String world) {
+    public void setBalance(OfflinePlayer player, double balance, String world) {
         // Withdraw current amount so account is empty
         economy.withdrawPlayer(((BukkitOfflinePlayer) player).getHandle(), world, getBalance(player).orElse(0));
         economy.depositPlayer(((BukkitOfflinePlayer) player).getHandle(), world, balance);

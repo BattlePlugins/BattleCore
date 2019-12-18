@@ -3,9 +3,9 @@ package mc.alk.battlecore.sponge.economy;
 import com.google.common.collect.Sets;
 
 import mc.alk.battlecore.economy.EconomyHandler;
-import mc.alk.mc.MCOfflinePlayer;
-import mc.alk.mc.MCPlatform;
 
+import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.plugin.Plugin;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;
@@ -20,35 +20,37 @@ import java.util.OptionalDouble;
 
 public class SpongeEconomyHandler implements EconomyHandler {
 
+    private Plugin plugin;
     private EconomyService economyService;
 
-    public SpongeEconomyHandler(EconomyService economyService) {
+    public SpongeEconomyHandler(Plugin plugin, EconomyService economyService) {
+        this.plugin = plugin;
         this.economyService = economyService;
     }
 
     @Override
-    public boolean hasAccount(MCOfflinePlayer player) {
+    public boolean hasAccount(OfflinePlayer player) {
         return economyService.hasAccount(player.getUniqueId());
     }
 
     @Override
-    public boolean hasAccount(MCOfflinePlayer player, String world) {
+    public boolean hasAccount(OfflinePlayer player, String world) {
         return hasAccount(player);
     }
 
     @Override
-    public void createAccount(MCOfflinePlayer player) {
+    public void createAccount(OfflinePlayer player) {
         // Creates an account if one does not exist
         economyService.getOrCreateAccount(player.getUniqueId());
     }
 
     @Override
-    public void createAccount(MCOfflinePlayer player, String world) {
+    public void createAccount(OfflinePlayer player, String world) {
         createAccount(player);
     }
 
     @Override
-    public OptionalDouble getBalance(MCOfflinePlayer player) {
+    public OptionalDouble getBalance(OfflinePlayer player) {
         Optional<UniqueAccount> opAccount = getOrCreateAccount(player);
         return opAccount.map(uniqueAccount ->
                 OptionalDouble.of(uniqueAccount.getBalance(economyService.getDefaultCurrency()).doubleValue()))
@@ -56,7 +58,7 @@ public class SpongeEconomyHandler implements EconomyHandler {
     }
 
     @Override
-    public OptionalDouble getBalance(MCOfflinePlayer player, String world) {
+    public OptionalDouble getBalance(OfflinePlayer player, String world) {
         Optional<World> opWorld = Sponge.getServer().getWorld(world);
         if (!opWorld.isPresent())
             return getBalance(player);
@@ -68,13 +70,13 @@ public class SpongeEconomyHandler implements EconomyHandler {
     }
 
     @Override
-    public void setBalance(MCOfflinePlayer player, double balance) {
+    public void setBalance(OfflinePlayer player, double balance) {
         getOrCreateAccount(player).map(uniqueAccount ->
                 uniqueAccount.setBalance(economyService.getDefaultCurrency(), BigDecimal.valueOf(balance), getDefaultCause()));
     }
 
     @Override
-    public void setBalance(MCOfflinePlayer player, double balance, String world) {
+    public void setBalance(OfflinePlayer player, double balance, String world) {
         Optional<World> opWorld = Sponge.getServer().getWorld(world);
         if (!opWorld.isPresent()) {
             setBalance(player, balance);
@@ -84,12 +86,12 @@ public class SpongeEconomyHandler implements EconomyHandler {
                 uniqueAccount.setBalance(economyService.getDefaultCurrency(), BigDecimal.valueOf(balance), getDefaultCause(), Sets.newHashSet(opWorld.get().getContext())));
     }
 
-    public Optional<UniqueAccount> getOrCreateAccount(MCOfflinePlayer player) {
+    public Optional<UniqueAccount> getOrCreateAccount(OfflinePlayer player) {
         return economyService.getOrCreateAccount(player.getUniqueId());
     }
 
     private Cause getDefaultCause() {
-        return Sponge.getPluginManager().fromInstance(MCPlatform.getPluginManager().getPlugin())
+        return Sponge.getPluginManager().fromInstance(plugin.getPlatformPlugin())
                 .map(pluginContainer ->
                 Cause.of(EventContext
                         .builder()

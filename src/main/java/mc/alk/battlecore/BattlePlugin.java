@@ -4,22 +4,22 @@ import mc.alk.battlecore.bukkit.platform.BattleBukkitCodeHandler;
 import mc.alk.battlecore.nukkit.platform.BattleNukkitCodeHandler;
 import mc.alk.battlecore.sponge.platform.BattleSpongeCodeHandler;
 import mc.alk.battlecore.util.Log;
-import mc.alk.mc.APIType;
-import mc.alk.mc.plugin.MCPlugin;
+import org.battleplugins.PlatformType;
+import org.battleplugins.plugin.Plugin;
 
-public class BattlePlugin extends MCPlugin {
+public class BattlePlugin extends Plugin {
 
     @Override
     public void onEnable() {
-        APIType api = getPlatform().getAPIType();
-        if (api == APIType.BUKKIT)
-            platformCode.put(APIType.BUKKIT, new BattleBukkitCodeHandler());
+        PlatformType platformType = this.getPlatform().getType();
+        if (platformType == PlatformType.BUKKIT)
+            platformCode.put(PlatformType.BUKKIT, new BattleBukkitCodeHandler());
 
-        if (api == APIType.NUKKIT)
-            platformCode.put(APIType.NUKKIT, new BattleNukkitCodeHandler());
+        if (platformType == PlatformType.NUKKIT)
+            platformCode.put(PlatformType.NUKKIT, new BattleNukkitCodeHandler());
 
-        if (api == APIType.SPONGE)
-            platformCode.put(APIType.SPONGE, new BattleSpongeCodeHandler());
+        if (platformType == PlatformType.SPONGE)
+            platformCode.put(PlatformType.SPONGE, new BattleSpongeCodeHandler(this));
 
         Log.setPlugin(this);
     }

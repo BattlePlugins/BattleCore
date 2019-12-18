@@ -1,35 +1,35 @@
 package mc.alk.battlecore.economy;
 
-import mc.alk.mc.MCOfflinePlayer;
+import org.battleplugins.entity.living.player.OfflinePlayer;
 
 import java.util.OptionalDouble;
 
 public interface EconomyHandler {
 
-    boolean hasAccount(MCOfflinePlayer player);
-    boolean hasAccount(MCOfflinePlayer player, String world);
-    void createAccount(MCOfflinePlayer player);
-    void createAccount(MCOfflinePlayer player, String world);
+    boolean hasAccount(OfflinePlayer player);
+    boolean hasAccount(OfflinePlayer player, String world);
+    void createAccount(OfflinePlayer player);
+    void createAccount(OfflinePlayer player, String world);
 
-    OptionalDouble getBalance(MCOfflinePlayer player);
-    OptionalDouble getBalance(MCOfflinePlayer player, String world);
+    OptionalDouble getBalance(OfflinePlayer player);
+    OptionalDouble getBalance(OfflinePlayer player, String world);
 
-    default void depositBalance(MCOfflinePlayer player, double balance) {
+    default void depositBalance(OfflinePlayer player, double balance) {
         setBalance(player, getBalance(player).orElse(0) + balance);
     }
 
-    default void depositBalance(MCOfflinePlayer player, double balance, String world) {
+    default void depositBalance(OfflinePlayer player, double balance, String world) {
         setBalance(player, getBalance(player).orElse(0) + balance, world);
     }
 
-    default void withdrawBalance(MCOfflinePlayer player, double balance) {
+    default void withdrawBalance(OfflinePlayer player, double balance) {
         setBalance(player, getBalance(player).orElse(0) - balance);
     }
 
-    default void withdrawBalance(MCOfflinePlayer player, double balance, String world) {
+    default void withdrawBalance(OfflinePlayer player, double balance, String world) {
         setBalance(player, getBalance(player).orElse(0) - balance, world);
     }
 
-    void setBalance(MCOfflinePlayer player, double balance);
-    void setBalance(MCOfflinePlayer player, double balance, String world);
+    void setBalance(OfflinePlayer player, double balance);
+    void setBalance(OfflinePlayer player, double balance, String world);
 }

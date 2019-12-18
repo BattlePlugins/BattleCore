@@ -14,8 +14,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import mc.alk.mc.APIType;
-import mc.alk.mc.MCPlatform;
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
 import org.apache.commons.dbcp.PoolableConnectionFactory;
@@ -23,6 +21,8 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.KeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
+import org.battleplugins.Platform;
+import org.battleplugins.PlatformType;
 
 /**
  *
@@ -175,7 +175,7 @@ public abstract class SQLSerializer {
 
     protected boolean init() {
         Connection con = null;  /// Our database connection
-        if (MCPlatform.getAPI() != APIType.SPONGE) {
+        if (Platform.getPlatformType() != PlatformType.SPONGE) {
             try {
                 Class.forName(TYPE.getDriver());
                 if (DEBUG)

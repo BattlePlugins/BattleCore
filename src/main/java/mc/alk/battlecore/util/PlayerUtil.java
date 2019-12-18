@@ -1,48 +1,24 @@
 package mc.alk.battlecore.util;
 
-import mc.alk.mc.MCOfflinePlayer;
-import mc.alk.mc.MCPlatform;
-import mc.alk.mc.MCPlayer;
+import org.battleplugins.Platform;
+import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.entity.living.player.Player;
+
+import java.util.Optional;
 
 public class PlayerUtil {
 
-    public static MCPlayer findPlayer(String name) {
+    public static Optional<? extends Player> findPlayer(String name) {
         if (name == null)
-            return null;
+            return Optional.empty();
 
-        MCPlayer foundPlayer = MCPlatform.getPlatform().getPlayer(name);
-        if (foundPlayer != null)
-            return foundPlayer;
-
-        for (MCPlayer player : MCPlatform.getPlatform().getOnlinePlayers()) {
-            String playerName = player.getName();
-
-            if (playerName.equalsIgnoreCase(name)) {
-                foundPlayer = player;
-                break;
-            }
-
-            if (playerName.toLowerCase().contains(name.toLowerCase())) {
-                if (foundPlayer != null) {
-                    return null;}
-
-                foundPlayer = player;
-            }
-        }
-
-        return foundPlayer;
+        return Platform.getPlatform().getPlayer(name);
     }
 
-    public static MCOfflinePlayer findOfflinePlayer(String name) {
-        MCPlayer player = findPlayer(name);
-        if (player != null){
-            return MCPlatform.getPlatform().getOfflinePlayer(name);
-        } else{
-            MCOfflinePlayer offlinePlayer = MCPlatform.getPlatform().getOfflinePlayer(name);
-            if (offlinePlayer != null)
-                return offlinePlayer;
+    public static Optional<? extends OfflinePlayer> findOfflinePlayer(String name) {
+        if (findPlayer(name).isPresent())
+            return findPlayer(name);
 
-            return null;
-        }
+        return Platform.getPlatform().getOfflinePlayer(name);
     }
 }

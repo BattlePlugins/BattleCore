@@ -1,12 +1,13 @@
-package mc.alk.battlecore.controllers;
+package mc.alk.battlecore.message;
 
 import mc.alk.battlecore.configuration.Configuration;
 import mc.alk.battlecore.configuration.ConfigurationSection;
 import mc.alk.battlecore.util.Log;
-import mc.alk.mc.ChatColor;
-import mc.alk.mc.MCOfflinePlayer;
-import mc.alk.mc.MCPlayer;
-import mc.alk.mc.command.MCCommandSender;
+
+import org.battleplugins.ChatColor;
+import org.battleplugins.command.CommandSender;
+import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.entity.living.player.Player;
 
 import java.io.File;
 import java.util.Formatter;
@@ -16,6 +17,7 @@ import java.util.Formatter;
  *
  * @author alkarin
  */
+// TODO: Split into handlers and add support for other chat plugins (e.g. herochat)
 public class MessageController {
 
     public static final char COLOR_MC_CHAR = ChatColor.COLOR_CHAR;
@@ -88,7 +90,7 @@ public class MessageController {
         return load();
     }
 
-    public static boolean sendMessage(MCPlayer p, String message){
+    public static boolean sendMessage(Player p, String message){
         if (message == null)
             return true;
 
@@ -97,13 +99,13 @@ public class MessageController {
             if (p == null){
                 Log.info(MessageController.colorChat(msg));
             } else {
-                p.getPlayer().sendMessage(MessageController.colorChat(msg));
+                p.sendMessage(MessageController.colorChat(msg));
             }
         }
         return true;
     }
 
-    public static boolean sendMessage(MCOfflinePlayer p, String message){
+    public static boolean sendMessage(OfflinePlayer p, String message){
         if (message == null)
             return true;
         String[] msgs = message.split("\n");
@@ -111,14 +113,14 @@ public class MessageController {
             if (p == null){
                 Log.info(MessageController.colorChat(msg));
             } else {
-                p.getPlayer().sendMessage(MessageController.colorChat(msg));
+                p.getPlayer().ifPresent(player -> player.sendMessage(MessageController.colorChat(msg)));
             }
         }
 
         return true;
     }
 
-    public static boolean sendMessage(MCCommandSender sender, String message){
+    public static boolean sendMessage(CommandSender sender, String message){
         if (message == null)
             return true;
 
@@ -126,7 +128,7 @@ public class MessageController {
         return true;
     }
 
-    public boolean sendMultilineMessage(MCCommandSender sender, String message){
+    public boolean sendMultilineMessage(CommandSender sender, String message){
         if (message == null)
             return true;
 

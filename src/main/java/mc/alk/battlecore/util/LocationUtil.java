@@ -1,13 +1,13 @@
 package mc.alk.battlecore.util;
 
-import mc.alk.mc.MCLocation;
-import mc.alk.mc.MCPlatform;
+import org.battleplugins.Platform;
+import org.battleplugins.world.Location;
 
 import java.util.StringTokenizer;
 
 public class LocationUtil {
 
-    public static MCLocation fromString(String locStr) {
+    public static Location fromString(String locStr) {
         StringTokenizer scan = new StringTokenizer(locStr,",");
 
         String world = scan.nextToken();
@@ -24,10 +24,10 @@ public class LocationUtil {
         if (scan.hasMoreTokens())
             yaw = Float.parseFloat(scan.nextToken());
 
-        return MCPlatform.getPlatform().getLocation(world, x, y, z, pitch, yaw);
+        return new Location(Platform.getPlatform().getWorld(world).orElseThrow(IllegalArgumentException::new), x, y, z, pitch, yaw);
     }
 
-    public static String toString(MCLocation location) {
+    public static String toString(Location location) {
         return location.getWorld().getName() + "," +
                 location.getX() + "," +
                 location.getY() + "," +

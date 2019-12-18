@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import mc.alk.battlecore.util.FileUtil;
 import mc.alk.battlecore.util.Log;
-import mc.alk.mc.scheduler.Scheduler;
+import org.battleplugins.scheduler.Scheduler;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
