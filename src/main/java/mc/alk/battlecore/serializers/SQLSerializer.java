@@ -22,7 +22,7 @@ import org.apache.commons.pool.KeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.battleplugins.Platform;
-import org.battleplugins.PlatformType;
+import org.battleplugins.PlatformTypes;
 
 /**
  *
@@ -175,7 +175,7 @@ public abstract class SQLSerializer {
 
     protected boolean init() {
         Connection con = null;  /// Our database connection
-        if (Platform.getPlatformType() != PlatformType.SPONGE) {
+        if (!Platform.getPlatformType().equals(PlatformTypes.SPONGE)) {
             try {
                 Class.forName(TYPE.getDriver());
                 if (DEBUG)
