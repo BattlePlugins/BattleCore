@@ -2,10 +2,10 @@ package mc.alk.battlecore.message;
 
 import mc.alk.battlecore.util.Log;
 
-import org.battleplugins.ChatColor;
-import org.battleplugins.command.CommandSender;
-import org.battleplugins.entity.living.player.OfflinePlayer;
-import org.battleplugins.entity.living.player.Player;
+import org.battleplugins.api.command.CommandSender;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.entity.living.player.Player;
+import org.battleplugins.api.message.MessageStyle;
 
 /**
  * MessageController
@@ -15,10 +15,8 @@ import org.battleplugins.entity.living.player.Player;
 // TODO: Split into handlers and add support for other chat plugins (e.g. herochat)
 public class MessageController {
 
-    public static final char COLOR_MC_CHAR = ChatColor.COLOR_CHAR;
-
     public static String colorChat(String msg) {
-        return msg.replaceAll("&", Character.toString(COLOR_MC_CHAR));
+        return msg.replaceAll("&", Character.toString(MessageStyle.COLOR_CHAR));
     }
 
     public static boolean sendMessage(Player p, String message){

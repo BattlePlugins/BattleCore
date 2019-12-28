@@ -4,9 +4,10 @@ import mc.alk.battlecore.bukkit.platform.BattleBukkitCodeHandler;
 import mc.alk.battlecore.nukkit.platform.BattleNukkitCodeHandler;
 import mc.alk.battlecore.sponge.platform.BattleSpongeCodeHandler;
 import mc.alk.battlecore.util.Log;
-import org.battleplugins.PlatformType;
-import org.battleplugins.PlatformTypes;
-import org.battleplugins.plugin.Plugin;
+
+import org.battleplugins.api.PlatformType;
+import org.battleplugins.api.PlatformTypes;
+import org.battleplugins.api.plugin.Plugin;
 
 public class BattlePlugin extends Plugin {
 

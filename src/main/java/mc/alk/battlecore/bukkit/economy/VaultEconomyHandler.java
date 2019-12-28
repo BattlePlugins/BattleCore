@@ -4,8 +4,8 @@ import mc.alk.battlecore.economy.EconomyHandler;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.battleplugins.bukkit.entity.living.player.BukkitOfflinePlayer;
-import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.bukkit.entity.living.player.BukkitOfflinePlayer;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
 
 import java.util.OptionalDouble;
 

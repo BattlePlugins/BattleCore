@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 
 import mc.alk.battlecore.economy.EconomyHandler;
 
-import org.battleplugins.entity.living.player.OfflinePlayer;
-import org.battleplugins.plugin.Plugin;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.plugin.Plugin;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.cause.EventContext;

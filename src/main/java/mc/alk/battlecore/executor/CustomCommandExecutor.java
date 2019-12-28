@@ -21,13 +21,13 @@ import mc.alk.battlecore.util.Log;
 import mc.alk.battlecore.util.PlayerUtil;
 import mc.alk.battlecore.util.StringUtil;
 
-import org.battleplugins.ChatColor;
-import org.battleplugins.command.Command;
-import org.battleplugins.command.CommandExecutor;
-import org.battleplugins.command.CommandSender;
-import org.battleplugins.command.ConsoleCommandSender;
-import org.battleplugins.entity.living.player.OfflinePlayer;
-import org.battleplugins.entity.living.player.Player;
+import org.battleplugins.api.command.Command;
+import org.battleplugins.api.command.CommandExecutor;
+import org.battleplugins.api.command.CommandSender;
+import org.battleplugins.api.command.ConsoleCommandSender;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.entity.living.player.Player;
+import org.battleplugins.api.message.MessageStyle;
 
 // FIXME: Ugly use of optionals and class cleanup
 public class CustomCommandExecutor implements CommandExecutor {
@@ -38,7 +38,7 @@ public class CustomCommandExecutor implements CommandExecutor {
     private static boolean DEBUG = false;
     private static final String DEFAULT_CMD = "_dcmd_";
     private static final int LINES_PER_PAGE = 8;
-    private static final String ONLY_INGAME = ChatColor.RED + "You need to be in game to use this command";
+    private static final String ONLY_INGAME = MessageStyle.RED + "You need to be in game to use this command";
 
     protected PriorityQueue<MethodWrapper> usage = new PriorityQueue<>(2, (mw1, mw2) -> {
         MCCommand cmd1 = mw1.getCommand();
@@ -269,7 +269,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         if (!success && errs != null && !errs.isEmpty()){
             Set<String> usages = new HashSet<>();
             for (CommandException e: errs){
-                usages.add(ChatColor.GOLD + "/" + command.getLabel() + " " + e.mw.usage + " &c:" + e.err.getMessage());
+                usages.add(MessageStyle.GOLD + "/" + command.getLabel() + " " + e.mw.usage + " &c:" + e.err.getMessage());
             }
             for (String msg : usages){
                 MessageController.sendMessage(sender, msg);}
@@ -484,7 +484,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         try {
             return Integer.parseInt(object.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ChatColor.RED+(String)object+" is not a valid integer.");
+            throw new IllegalArgumentException(MessageStyle.RED+(String)object+" is not a valid integer.");
         }
     }
 
@@ -492,7 +492,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         try {
             return Float.parseFloat(object.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ChatColor.RED+(String)object+" is not a valid float.");
+            throw new IllegalArgumentException(MessageStyle.RED+ object.toString() +" is not a valid float.");
         }
     }
 
@@ -500,7 +500,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         try {
             return Double.parseDouble(object.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(ChatColor.RED+(String)object+" is not a valid double.");
+            throw new IllegalArgumentException(MessageStyle.RED+ object.toString() +" is not a valid double.");
         }
     }
 
@@ -515,7 +515,7 @@ public class CustomCommandExecutor implements CommandExecutor {
             try{
                 page = Integer.parseInt(args[1]);
             } catch (Exception e){
-                MessageController.sendMessage(sender, ChatColor.RED+" " + args[1] +" is not a number, showing help for page 1.");
+                MessageController.sendMessage(sender, MessageStyle.RED+" " + args[1] +" is not a number, showing help for page 1.");
             }
         }
 
@@ -565,7 +565,7 @@ public class CustomCommandExecutor implements CommandExecutor {
             if (i < (page - 1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
                 continue;
 
-            MessageController.sendMessage(sender, ChatColor.RED + "[Insufficient Perms] " + use);
+            MessageController.sendMessage(sender, MessageStyle.RED + "[Insufficient Perms] " + use);
         }
         if (sender.isOp()){
             for (String use : onlyop){
@@ -573,7 +573,7 @@ public class CustomCommandExecutor implements CommandExecutor {
                 if (i < (page-1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
                     continue;
 
-                MessageController.sendMessage(sender, ChatColor.AQUA + "[OP only] &6" + use);
+                MessageController.sendMessage(sender, MessageStyle.AQUA + "[OP only] &6" + use);
             }
         }
     }

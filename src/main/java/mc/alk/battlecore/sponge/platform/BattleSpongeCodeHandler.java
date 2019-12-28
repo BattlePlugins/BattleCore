@@ -3,8 +3,8 @@ package mc.alk.battlecore.sponge.platform;
 import mc.alk.battlecore.economy.EconomyController;
 import mc.alk.battlecore.sponge.economy.SpongeEconomyHandler;
 
-import org.battleplugins.plugin.Plugin;
-import org.battleplugins.plugin.platform.PlatformCodeHandler;
+import org.battleplugins.api.plugin.Plugin;
+import org.battleplugins.api.plugin.platform.PlatformCodeHandler;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.service.ProviderRegistration;
 import org.spongepowered.api.service.economy.EconomyService;

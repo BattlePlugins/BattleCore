@@ -21,8 +21,8 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.KeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericKeyedObjectPoolFactory;
 import org.apache.commons.pool.impl.GenericObjectPool;
-import org.battleplugins.Platform;
-import org.battleplugins.PlatformTypes;
+import org.battleplugins.api.Platform;
+import org.battleplugins.api.PlatformTypes;
 
 /**
  *

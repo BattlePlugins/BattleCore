@@ -1,7 +1,7 @@
 package mc.alk.battlecore.util;
 
-import org.battleplugins.Platform;
-import org.battleplugins.world.Location;
+import org.battleplugins.api.Platform;
+import org.battleplugins.api.world.Location;
 
 import java.util.StringTokenizer;
 

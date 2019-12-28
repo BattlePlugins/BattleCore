@@ -5,7 +5,7 @@ import mc.alk.battlecore.economy.EconomyController;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.battleplugins.plugin.platform.PlatformCodeHandler;
+import org.battleplugins.api.plugin.platform.PlatformCodeHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 

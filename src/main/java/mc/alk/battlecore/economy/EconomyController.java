@@ -1,6 +1,6 @@
 package mc.alk.battlecore.economy;
 
-import org.battleplugins.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
 
 import java.util.OptionalDouble;
 

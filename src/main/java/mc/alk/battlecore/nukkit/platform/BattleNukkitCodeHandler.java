@@ -7,7 +7,7 @@ import cn.nukkit.Server;
 import mc.alk.battlecore.economy.EconomyController;
 import mc.alk.battlecore.nukkit.economy.EconomyAPIEconomyHandler;
 
-import org.battleplugins.plugin.platform.PlatformCodeHandler;
+import org.battleplugins.api.plugin.platform.PlatformCodeHandler;
 
 public class BattleNukkitCodeHandler extends PlatformCodeHandler {
 

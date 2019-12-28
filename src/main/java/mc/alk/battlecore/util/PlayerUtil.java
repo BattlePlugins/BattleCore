@@ -1,8 +1,8 @@
 package mc.alk.battlecore.util;
 
-import org.battleplugins.Platform;
-import org.battleplugins.entity.living.player.OfflinePlayer;
-import org.battleplugins.entity.living.player.Player;
+import org.battleplugins.api.Platform;
+import org.battleplugins.api.entity.living.player.OfflinePlayer;
+import org.battleplugins.api.entity.living.player.Player;
 
 import java.util.Optional;
 
