@@ -24,7 +24,7 @@ public class LocationUtil {
         if (scan.hasMoreTokens())
             yaw = Float.parseFloat(scan.nextToken());
 
-        return new Location(Platform.getPlatform().getWorld(world).orElseThrow(IllegalArgumentException::new), x, y, z, pitch, yaw);
+        return new Location(Platform.getServer().getWorld(world).orElseThrow(IllegalArgumentException::new), x, y, z, pitch, yaw);
     }
 
     public static String toString(Location location) {

@@ -12,13 +12,13 @@ public class PlayerUtil {
         if (name == null)
             return Optional.empty();
 
-        return Platform.getPlatform().getPlayer(name);
+        return Platform.getServer().getPlayer(name);
     }
 
     public static Optional<? extends OfflinePlayer> findOfflinePlayer(String name) {
         if (findPlayer(name).isPresent())
             return findPlayer(name);
 
-        return Platform.getPlatform().getOfflinePlayer(name);
+        return Platform.getServer().getOfflinePlayer(name);
     }
 }
