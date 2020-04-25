@@ -269,7 +269,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         if (!success && errs != null && !errs.isEmpty()){
             Set<String> usages = new HashSet<>();
             for (CommandException e: errs){
-                usages.add(MessageStyle.GOLD + "/" + command.getLabel() + " " + e.mw.usage + " &c:" + e.err.getMessage());
+                usages.add(MessageStyle.GOLD + "/" + command.getLabel() + " " + e.mw.usage + "&c" + e.err.getMessage());
             }
             for (String msg : usages){
                 MessageController.sendMessage(sender, msg);}
@@ -500,7 +500,7 @@ public class CustomCommandExecutor implements CommandExecutor {
         try {
             return Double.parseDouble(object.toString());
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException(MessageStyle.RED+ object.toString() +" is not a valid double.");
+            throw new IllegalArgumentException(MessageStyle.RED + object.toString() + " is not a valid double.");
         }
     }
 
@@ -515,65 +515,66 @@ public class CustomCommandExecutor implements CommandExecutor {
             try{
                 page = Integer.parseInt(args[1]);
             } catch (Exception e){
-                MessageController.sendMessage(sender, MessageStyle.RED+" " + args[1] +" is not a number, showing help for page 1.");
+                MessageController.sendMessage(sender, MessageStyle.RED + " " + args[1] + " is not a number, showing help for page 1.");
             }
         }
 
         List<String> available = new ArrayList<>();
         List<String> unavailable = new ArrayList<>();
         List<String> onlyop = new ArrayList<>();
-
+        Set<Method> dups = new HashSet<>();
         for (MethodWrapper mw : usage){
+            if (!dups.add(mw.method))
+                continue;
             MCCommand cmd = mw.getCommand();
-            String use = "&6/" + command.getLabel() + " " + mw.usage;
+            final String use = "&6/" + command.getLabel() + " " + mw.usage;
             if (cmd.op() && !sender.isOp())
-                continue;
-
-            if (cmd.admin() && !hasAdminPerms(sender))
-                continue;
-
-            if (!cmd.perm().isEmpty() && !sender.hasPermission(cmd.perm()))
+                onlyop.add(use);
+            else if (!cmd.perm().isEmpty() && !sender.hasPermission(cmd.perm()))
                 unavailable.add(use);
             else
                 available.add(use);
         }
-        int npages = available.size()+unavailable.size();
+        int npages = available.size() + unavailable.size();
         if (sender.isOp())
             npages += onlyop.size();
+
         npages = (int) Math.ceil((float) npages / LINES_PER_PAGE);
         if (page > npages || page <= 0){
-            MessageController.sendMessage(sender, "&4That page doesnt exist, try 1-"+npages);
+            if (npages <= 0){
+                MessageController.sendMessage(sender, "&4There are no methods for this command");
+            } else {
+                MessageController.sendMessage(sender, "&4That page doesnt exist, try 1-"+npages);
+            }
             return;
         }
-        if (command != null && command.getAliases() != null && !command.getAliases().isEmpty()) {
-            String aliases = StringUtil.join(command.getAliases(),", ");
-            MessageController.sendMessage(sender, "&eShowing page &6"+page +"/"+npages +"&6 : /"+command.getLabel()+" help <page number>");
-            MessageController.sendMessage(sender, "&e    command &6"+command.getLabel()+"&e has aliases: &6" + aliases);
-        } else {
-            MessageController.sendMessage(sender, "&eShowing page &6"+page +"/"+npages +"&6 : /" + command.getLabel() + " help <page number>");
+        MessageController.sendMessage(sender, "&eShowing page &6" + page +"/" + npages +"&6 : /" + command.getLabel() + " help <page number>");
+        if (command.getAliases() != null && !command.getAliases().isEmpty()) {
+            String aliases = String.join(", ", command.getAliases());
+            MessageController.sendMessage(sender, "&eShowing page &6" + page +"/" + npages +"&6 : /" + command.getLabel() + " help <page number>");
+            MessageController.sendMessage(sender, "&e    command &6" + command.getLabel() + "&e has aliases: &6" + aliases);
         }
         int i = 0;
         for (String use : available){
             i++;
-            if (i < (page - 1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
+            if (i < (page-1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
                 continue;
-
             MessageController.sendMessage(sender, use);
         }
         for (String use : unavailable){
             i++;
-            if (i < (page - 1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
+            if (i < (page-1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
                 continue;
 
-            MessageController.sendMessage(sender, MessageStyle.RED + "[Insufficient Perms] " + use);
+            MessageController.sendMessage(sender, MessageStyle.RED + "You do not have permission to run this command! " + use);
         }
         if (sender.isOp()){
             for (String use : onlyop){
                 i++;
-                if (i < (page-1) * LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
+                if (i < (page-1) *LINES_PER_PAGE || i >= page * LINES_PER_PAGE)
                     continue;
 
-                MessageController.sendMessage(sender, MessageStyle.AQUA + "[OP only] &6" + use);
+                MessageController.sendMessage(sender, MessageStyle.AQUA + "This is an OP only command! &6" + use);
             }
         }
     }
