@@ -14,8 +14,8 @@ public class BattlePlugin extends Plugin {
     @Override
     public void onEnable() {
         PlatformType platformType = this.getPlatform().getType();
-        if (platformType.equals(PlatformTypes.BUKKIT))
-            platformCode.put(PlatformTypes.BUKKIT, new BattleBukkitCodeHandler());
+        if (platformType.equals(PlatformTypes.PAPER))
+            platformCode.put(PlatformTypes.PAPER, new BattleBukkitCodeHandler());
 
         if (platformType.equals(PlatformTypes.NUKKIT))
             platformCode.put(PlatformTypes.NUKKIT, new BattleNukkitCodeHandler());
