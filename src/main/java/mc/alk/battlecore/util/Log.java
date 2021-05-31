@@ -1,8 +1,5 @@
 package mc.alk.battlecore.util;
 
-import mc.alk.battlecore.message.MessageController;
-
-import org.battleplugins.api.message.MessageStyle;
 import org.battleplugins.api.plugin.Plugin;
 
 public class Log {
@@ -22,7 +19,7 @@ public class Log {
     }
 
     public static String colorChat(String msg) {
-        return msg.replace("&", String.valueOf(MessageStyle.COLOR_CHAR));
+        return msg.replace("&", String.valueOf('§'));
     }
 
     public static void debug(String string) {
